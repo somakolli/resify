@@ -1,10 +1,8 @@
 package de.freshspark.resify.controllers.api
 
 import de.freshspark.resify.repositories.CalendarRepository
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import de.freshspark.resify.repositories.UserRepository
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/public/{company}")
@@ -12,4 +10,12 @@ class CalendarController(val calendarRepository: CalendarRepository) {
     @GetMapping("")
     fun getCalendars(@PathVariable company: String) =
         calendarRepository.findAllByResifyUserEmail(company)
+}
+
+@RestController
+@RequestMapping("/public/users")
+class UserController(val userRepository: UserRepository) {
+    @GetMapping("")
+    fun getUsers(@RequestParam("q") subString: String) =
+        userRepository.findTopByEmailContains(subString)
 }

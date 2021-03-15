@@ -6,6 +6,7 @@ import java.time.LocalDate
 import java.util.*
 
 interface UserRepository : JpaRepository<ResifyUser, UUID> {
+    fun findTopByEmailContains(subString: String): List<ResifyUser>
     fun findByEmail(email: String): ResifyUser?
 }
 
