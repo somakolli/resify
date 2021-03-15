@@ -8,7 +8,7 @@ export class MyDate {
     this.month = month;
     this.day = day;
   }
-  private pad(a, b) {
+  private static pad(a, b) {
     return (1e15 + a + '').slice(-b);
   }
   toDate() {
@@ -17,8 +17,15 @@ export class MyDate {
   static fromDate(date: Date): MyDate {
     return new MyDate(date.getFullYear(), date.getMonth(), date.getDate());
   }
+  static fromString(date: string): MyDate {
+    const dateList = date.split('-').map(dateUnit => parseInt(dateUnit));
+    return this.fromArray(dateList);
+  }
+  static fromArray(date: Array<number>): MyDate {
+    return new MyDate(date[0], date[1], date[2]);
+  }
   static fromServerResponse(response) {
-    return new MyDate(response[0], response[1] - 1, response[2]);
+    return this.fromString(response);
   }
   addDay(value: number) {
     const tempDate = this.toDate();
@@ -31,7 +38,7 @@ export class MyDate {
   toISOString() {
     return [this.year, this.month, this.day]
       .map(value => {
-        return value < 1000 ? this.pad(value, 2) : value;
+        return value < 1000 ? MyDate.pad(value, 2) : value;
       })
       .join('-');
   }
