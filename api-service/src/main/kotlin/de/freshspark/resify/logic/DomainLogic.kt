@@ -49,7 +49,7 @@ fun generateWorkSlots(configSlots: Collection<ConfigurationWorkSlot>,
     val periodLength = ((configSlots.size / 7) + 1) * 7
 
     var currentDate = dateRange.startDate
-    var i: Byte = ((dateRange.startDate.dayOfWeek.value - 1) % periodLength)
+    var i: Byte = ((dateRange.startDate!!.dayOfWeek.value - 1) % periodLength)
         .toByte();
     while (currentDate != dateRange.endDate) {
         configSlotMap[i]?.forEach {
@@ -59,7 +59,7 @@ fun generateWorkSlots(configSlots: Collection<ConfigurationWorkSlot>,
             returnSlots.add(workSlot)
         }
         i = ((i + 1) % periodLength).toByte()
-        currentDate = currentDate.plusDays(1);
+        currentDate = currentDate!!.plusDays(1);
     }
     return returnSlots
 }

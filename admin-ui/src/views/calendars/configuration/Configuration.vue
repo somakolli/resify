@@ -20,17 +20,17 @@
   </div>
 </template>
 <script>
-import Icon from "../../../components/Icon.vue";
-import TabMenu from "../../../components/TabMenu.vue";
-import CalendarModel from "../../../models/CalendarModel.ts";
+import Icon from '../../../components/Icon.vue';
+import TabMenu from '../../../components/TabMenu.vue';
+import CalendarModel from '@share/models/CalendarModel';
 export default {
   props: {
     calendar: {
       type: CalendarModel,
-      required: true
-    }
+      required: true,
+    },
   },
   components: { TabMenu, Icon },
-  emits: ["close"]
+  emits: ['close'],
 };
 </script>

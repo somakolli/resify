@@ -1,4 +1,4 @@
-import { ConfigWorkSlot } from './WorkSlotModel';
+import { ConfigWorkSlot } from "./WorkSlotModel";
 
 export class WorkSlotDay {
   name: string;

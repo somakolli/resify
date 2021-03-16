@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="calendar in calendars">
+    <div  v-for="calendar in calendars" :key="calendar.calendarName">
       {{calendar.calendarName}}
     </div>
   </div>

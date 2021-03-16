@@ -47,7 +47,6 @@
   </div>
 </template>
 <script lang="ts">
-import { Auth } from '@aws-amplify/auth';
 import { useRoute, useRouter } from 'vue-router';
 
 import Icon from '../components/Icon.vue';
@@ -68,19 +67,19 @@ export default {
       sideBarIcons: [
         {
           iconName: 'calendar',
-          route: 'calendars'
+          route: 'calendars',
         },
         {
           iconName: 'stats',
-          route: 'stats'
+          route: 'stats',
         },
         {
           iconName: 'logout',
-          route: 'logout'
-        }
+          route: 'logout',
+        },
       ],
       navVisibility: 'flex',
-      windowLargeEnough: true
+      windowLargeEnough: true,
     };
   },
   watch: {
@@ -90,7 +89,7 @@ export default {
       } else {
         this.navVisibility = 'flex';
       }
-    }
-  }
+    },
+  },
 };
 </script>

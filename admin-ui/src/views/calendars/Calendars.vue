@@ -42,16 +42,16 @@ import Calendar from '../../components/Calendar.vue';
 import Icon from '../../components/Icon.vue';
 import LabelInput from '../../components/LabelInput.vue';
 import PopUpModal from '../../components/PopUpModal.vue';
-import CalendarModel from '../../models/CalendarModel';
+import CalendarModel from '@share/models/CalendarModel';
 import { ref } from 'vue';
-import { getDataAuthenticated } from '@/helpers/HttpHelper';
 import { url } from '@/config/url-config';
-import { CalendarService } from '@/services/CalendarService';
+import { CalendarService } from '@share/services/CalendarService';
+import { authProvider } from '@/config/auth-config';
 export default {
   components: { LabelInput, PopUpModal, Icon, Calendar },
   setup() {
     const newCalendarName = ref('');
-    const calendarService = new CalendarService();
+    const calendarService = new CalendarService(url, authProvider);
     const addCalendar = ref(false);
 
     async function addCalendarRequest() {
@@ -60,20 +60,15 @@ export default {
     }
     const data = ref<CalendarModel[]>(new Array<CalendarModel>());
 
-    getDataAuthenticated<Array<CalendarModel>>(url + '/api/calendars').then(
-      newData => {
-        newData.forEach(calendarModel => {
-          // need to do this because fetch does not return commonjs classes
-          data.value.push(new CalendarModel(calendarModel));
-        });
-      }
-    );
+    calendarService
+      .getCalendars()
+      .then((returnData) => (data.value = returnData));
 
     return {
       newCalendarName,
       addCalendarRequest,
       data,
-      addCalendar
+      addCalendar,
     };
   },
   data() {
@@ -88,7 +83,7 @@ export default {
       } else {
         return 'block';
       }
-    }
-  }
+    },
+  },
 };
 </script>

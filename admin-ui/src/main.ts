@@ -22,7 +22,7 @@ const clickOuside = {
   },
   unmounted(el) {
     document.body.removeEventListener('click', el.clickOutsideEvent);
-  }
+  },
 };
 createApp(App)
   .directive('click-outside', clickOuside)

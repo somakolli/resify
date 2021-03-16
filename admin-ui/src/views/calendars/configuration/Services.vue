@@ -1,7 +1,11 @@
 <template>
   <div class="flex flex-col h-full w-11/12 mx-auto overflow-auto">
     <header class="flex flex-row-reverse items-center mt-5">
-      <Icon @click="createServiceActive = true" icon-name="plus" class="w-8 h-8 cursor-pointer"></Icon>
+      <Icon
+        @click="createServiceActive = true"
+        icon-name="plus"
+        class="w-8 h-8 cursor-pointer"
+      ></Icon>
       <Icon
         @click="edit = !edit"
         icon-name="pencil"
@@ -48,25 +52,27 @@
 <script lang="ts">
 import Icon from '@/components/Icon.vue';
 import { ref } from 'vue';
-import { Service } from '@/models/Service';
+import { Service } from '@share/models/Service';
 import ListItem from '@/components/ListItem.vue';
-import { ServiceService } from '@/services/ServiceService';
-import { CalendarService } from '@/services/CalendarService';
+import { ServiceService } from '@share/services/ServiceService';
+import { CalendarService } from '@share/services/CalendarService';
 import PopUpModal from '@/components/PopUpModal.vue';
 import LabelInput from '@/components/LabelInput.vue';
+import { url } from '@/config/url-config';
+import { authProvider } from '@/config/auth-config';
 export default {
   components: { LabelInput, PopUpModal, ListItem, Icon },
   props: {
     route: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   setup(props) {
     const edit = ref(false);
     const services = ref(new Array<Service>());
-    const serviceService = new ServiceService(props.route);
-    const calendarService = new CalendarService();
+    const serviceService = new ServiceService(props.route, url, authProvider);
+    const calendarService = new CalendarService(url, authProvider);
     const createServiceActive = ref(false);
     const newService = ref<Service>(new Service('', 30));
     async function createServiceRequest() {
@@ -74,7 +80,7 @@ export default {
       services.value.push(service);
       createServiceActive.value = false;
     }
-    calendarService.getCalendar(props.route).then(calendar => {
+    calendarService.getCalendar(props.route).then((calendar) => {
       services.value = calendar.services;
     });
     return {
@@ -82,8 +88,8 @@ export default {
       services,
       createServiceActive,
       createServiceRequest,
-      newService
+      newService,
     };
-  }
+  },
 };
 </script>

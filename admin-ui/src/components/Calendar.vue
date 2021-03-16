@@ -24,7 +24,7 @@
   </Card>
 </template>
 <script lang="ts">
-import CalendarModel from '../models/CalendarModel';
+import CalendarModel from '@share/models/CalendarModel';
 import Button from './Button.vue';
 import Card from './Card.vue';
 import Icon from './Icon.vue';
@@ -32,13 +32,13 @@ export default {
   components: {
     Button,
     Icon,
-    Card
+    Card,
   },
   props: {
     calendar: {
       type: CalendarModel,
-      required: true
-    }
-  }
+      required: true,
+    },
+  },
 };
 </script>

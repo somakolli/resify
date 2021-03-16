@@ -1,3 +1,4 @@
+export type DateFormat = "long" | "short" | "narrow" | undefined;
 export default class CalendarHelper {
   public static getDayNames(locale: string, format: DateFormat): Array<string> {
     const baseDate = new Date(Date.UTC(2017, 0, 2)); // just a Monday
@@ -8,7 +9,11 @@ export default class CalendarHelper {
     }
     return weekDays;
   }
-  public static getDayName(date: Date, locale: string, format: DateFormat) {
+  public static getDayName(
+    date: Date,
+    locale: string,
+    format: DateFormat
+  ): string {
     return date.toLocaleDateString(locale, { weekday: format });
   }
   public static getMonthName(
@@ -25,7 +30,7 @@ export default class CalendarHelper {
     const day = new Date(date.getFullYear(), date.getMonth(), 1).getDay() - 1;
     return CalendarHelper.mod(day, 7);
   }
-  public static addMonths(date: Date, monthsToAdd: number) {
+  public static addMonths(date: Date, monthsToAdd: number): Date {
     return new Date(date.getFullYear(), date.getMonth() + monthsToAdd, 1);
   }
   public static getNumberOfDays(date: Date): number {
@@ -46,8 +51,7 @@ export default class CalendarHelper {
       ).getDay() - 1;
     return CalendarHelper.mod(day, 7);
   }
-  private static mod(m: number, n: number) {
+  private static mod(m: number, n: number): number {
     return ((m % n) + n) % n;
   }
 }
-export type DateFormat = 'long' | 'short' | 'narrow' | undefined;

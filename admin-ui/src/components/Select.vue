@@ -28,41 +28,41 @@
   </div>
 </template>
 <script>
-import Icon from "./Icon";
+import Icon from './Icon';
 export default {
   components: { Icon },
   mixins: [],
-  emits: ["update:selectedItem"],
+  emits: ['update:selectedItem'],
   props: {
     options: {
       type: Array,
-      required: true
+      required: true,
     },
     selectedItem: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
-      active: "hidden",
-      shadow: ""
+      active: 'hidden',
+      shadow: '',
     };
   },
   methods: {
     changeVisibility() {
-      if (this.active === "flex") {
-        this.active = "hidden";
-        this.shadow = "";
+      if (this.active === 'flex') {
+        this.active = 'hidden';
+        this.shadow = '';
       } else {
-        this.active = "flex";
-        this.shadow = "shadow";
+        this.active = 'flex';
+        this.shadow = 'shadow';
       }
     },
     collapse() {
-      this.active = "hidden";
-      this.shadow = "";
-    }
-  }
+      this.active = 'hidden';
+      this.shadow = '';
+    },
+  },
 };
 </script>

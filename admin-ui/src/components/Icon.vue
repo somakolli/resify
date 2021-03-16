@@ -4,19 +4,19 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { iconRepository } from '@/stores/IconRepository';
+import { iconRepository } from '@share/stores/IconRepository';
 export default defineComponent({
   name: 'Icon',
   props: {
     iconName: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   computed: {
-    getSvg: function(): any {
+    getSvg: function (): any {
       return iconRepository.icons.get(this.iconName);
-    }
-  }
+    },
+  },
 });
 </script>

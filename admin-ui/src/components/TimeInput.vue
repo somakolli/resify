@@ -22,18 +22,18 @@
 
 <script lang="ts">
 import { ref, watch, watchEffect } from 'vue';
-import { Time } from '@/models/Time';
-import { useModelWrapper } from '@/helpers/ModelWrapper';
+import { Time } from '@share/DateTime/Time';
+import { useModelWrapper } from '@/ModelWrapper';
 export default {
   props: {
     labelText: {
       type: String,
-      required: true
+      required: true,
     },
     modelValue: {
       type: Time,
-      required: true
-    }
+      required: true,
+    },
   },
   emits: ['update:modelValue'],
   setup(props, context) {
@@ -71,9 +71,9 @@ export default {
       hours,
       minutes,
       hourInput,
-      time
+      time,
     };
-  }
+  },
 };
 </script>
 

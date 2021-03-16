@@ -12,7 +12,7 @@
   </div>
 </template>
 <script lang="ts">
-import { ConfigWorkSlot } from "@/models/WorkSlotModel";
+import { ConfigWorkSlot } from '@share/models/WorkSlotModel';
 import Icon from './Icon.vue';
 
 export default {
@@ -20,11 +20,11 @@ export default {
   props: {
     workSlot: {
       type: ConfigWorkSlot,
-      required: true
+      required: true,
     },
     removable: {
-      type: Boolean
-    }
-  }
+      type: Boolean,
+    },
+  },
 };
 </script>

@@ -35,7 +35,7 @@
       :style="{
         top: timeToPixel(reservation.timeRange.startTime) + 'px',
         height: reservation.timeRange.duration * minuteMargin + 'px',
-        right: 0
+        right: 0,
       }"
     >
       <div class="self-center flex justify-between w-full px-4">
@@ -50,29 +50,31 @@
   </div>
 </template>
 <script lang="ts">
-import { MyDate } from '@/models/MyDate';
-import { computed, ref } from "vue";
-import { Time } from '@/models/Time';
-import { PersonalInformation, Reservation } from '@/models/Reservation';
-import { ReservationService } from '@/services/ReservationService';
+import { computed, ref } from 'vue';
+import { Reservation } from '@share/models/Reservation';
+import { ReservationService } from '@share/services/ReservationService';
+import { MyDate } from '@share/DateTime/MyDate';
+import { Time } from '@share/DateTime/Time';
+import { url } from '@/config/url-config';
+import { authProvider } from '@/config/auth-config';
 export default {
   props: {
     selectedDate: {
       type: MyDate,
-      required: true
+      required: true,
     },
     containerHeight: {
       type: Number,
-      required: true
+      required: true,
     },
     locale: {
       type: String,
-      required: true
+      required: true,
     },
     route: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   setup(props: any) {
     const hourMargin = computed(() => {
@@ -90,10 +92,14 @@ export default {
     }
 
     const shownReservations = ref<Reservation[]>([]);
-    const reservationService = new ReservationService(props.route);
+    const reservationService = new ReservationService(
+      props.route,
+      url,
+      authProvider
+    );
     reservationService
       .retrieveReservations(props.selectedDate)
-      .then(reservations => {
+      .then((reservations) => {
         shownReservations.value = reservations;
         console.log(shownReservations.value);
       });
@@ -104,8 +110,8 @@ export default {
       minuteMargin,
       shownReservations,
       toHourString,
-      timeToPixel
+      timeToPixel,
     };
-  }
+  },
 };
 </script>

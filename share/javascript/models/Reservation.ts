@@ -1,5 +1,4 @@
-import { Time } from './Time';
-import { TimeRange } from '@/models/TimeRange';
+import { TimeRange } from "../DateTime/TimeRange";
 
 export class PersonalInformation {
   public _name: string;
@@ -28,7 +27,7 @@ export class Reservation {
   toLocalString(locale: string): string {
     return (
       this.timeRange.startTime.getLocaleString(locale) +
-      ' - ' +
+      " - " +
       this.timeRange.endTime.getLocaleString(locale)
     );
   }

@@ -12,7 +12,7 @@ export class Time {
   }
   public static fromString(timeString: string): Time {
     return this.fromArray(
-      timeString.split(':').map(timeUnit => parseInt(timeUnit))
+      timeString.split(":").map((timeUnit) => parseInt(timeUnit))
     );
   }
   public static fromArray(time: Array<number>): Time {
@@ -20,8 +20,8 @@ export class Time {
   }
   public getLocaleString(locale: string): string {
     return this.date.toLocaleTimeString(locale, {
-      hour: '2-digit',
-      minute: '2-digit'
+      hour: "2-digit",
+      minute: "2-digit",
     });
   }
   public getTotalMinutes(): number {

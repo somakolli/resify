@@ -22,7 +22,7 @@
   </div>
 </template>
 <script>
-import { useModelWrapper } from "@/helpers/ModelWrapper";
+import { useModelWrapper } from '@/ModelWrapper';
 import Icon from './Icon.vue';
 export default {
   components: { Icon },
@@ -30,28 +30,28 @@ export default {
     modelValue: {
       type: String,
       required: false,
-      default: ''
+      default: '',
     },
     placeholder: {
       type: String,
-      required: true
+      required: true,
     },
     type: {
       type: String,
       required: false,
-      default: 'text'
+      default: 'text',
     },
     errorText: {
       type: String,
       required: false,
-      default: ''
-    }
+      default: '',
+    },
   },
   emits: ['update:modelValue'],
   setup(props, { emit }) {
     return {
-      inputText: useModelWrapper(props, emit)
+      inputText: useModelWrapper(props, emit),
     };
-  }
+  },
 };
 </script>

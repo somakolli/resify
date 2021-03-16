@@ -63,9 +63,9 @@
             :class="[
               {
                 'bg-green-200': isSelectedDate(n),
-                'hover:bg-gray-200': !isSelectedDate(n)
+                'hover:bg-gray-200': !isSelectedDate(n),
               },
-              itemClass
+              itemClass,
             ]"
             v-for="n in numberOfDays"
             :key="n"
@@ -93,25 +93,25 @@
 </template>
 
 <script lang="ts">
-import CalendarHelper from "../helpers/CalendarHelper";
-import Icon from "./Icon.vue";
-import { ref, computed, watchEffect } from "vue";
-import { MyDate } from "../models/MyDate";
+import CalendarHelper from '@share/helpers/CalendarHelper';
+import Icon from './Icon.vue';
+import { ref, computed, watchEffect } from 'vue';
+import { MyDate } from '@share/DateTime/MyDate';
 export default {
   components: { Icon },
   props: {
     selectedDate: {
       type: MyDate,
-      required: true
+      required: true,
     },
     locale: {
       type: String,
-      default: "us-en"
-    }
+      default: 'us-en',
+    },
   },
-  emits: ["update:selectedDate"],
+  emits: ['update:selectedDate'],
   setup(props: any, context: any) {
-    const dayNames = CalendarHelper.getDayNames(props.locale, "short");
+    const dayNames = CalendarHelper.getDayNames(props.locale, 'short');
     const shownDate = ref(
       new Date(
         props.selectedDate.year,
@@ -124,12 +124,12 @@ export default {
       return CalendarHelper.getMonthName(
         props.selectedDate.toDate(),
         props.locale,
-        "long"
+        'long'
       );
     });
     console.log(monthName);
     const selectedMonthName = computed(() => {
-      return CalendarHelper.getMonthName(shownDate.value, props.locale, "long");
+      return CalendarHelper.getMonthName(shownDate.value, props.locale, 'long');
     });
     const firstDay = computed(() => {
       return CalendarHelper.getFirstDay(shownDate.value);
@@ -144,25 +144,21 @@ export default {
       return CalendarHelper.getDayName(
         props.selectedDate.toDate(),
         props.locale,
-        "short"
+        'short'
       );
     });
     function addMonth(monthsToAdd: number) {
       shownDate.value = CalendarHelper.addMonths(shownDate.value, monthsToAdd);
     }
     function updateSelectedDate(year: number, month: number, day: number) {
-      context.emit("update:selectedDate", new MyDate(year, month, day));
+      context.emit('update:selectedDate', new MyDate(year, month, day));
     }
     function addToSelectedDate(value: number) {
-      context.emit("update:selectedDate", props.selectedDate.addDay(value));
+      context.emit('update:selectedDate', props.selectedDate.addDay(value));
     }
     const previousMonthNumberOfDays = computed(() => {
       return CalendarHelper.getNumberOfDays(
-        new Date(
-          shownDate.value.getFullYear(),
-          shownDate.value.getMonth(),
-          1
-        )
+        new Date(shownDate.value.getFullYear(), shownDate.value.getMonth(), 1)
       );
     });
     watchEffect(() => {
@@ -189,7 +185,7 @@ export default {
       addToSelectedDate,
       previousMonthNumberOfDays,
       lastDay,
-      isSelectedDate
+      isSelectedDate,
     };
   },
   methods: {},
@@ -197,8 +193,8 @@ export default {
   data() {
     return {
       showSelection: false,
-      itemClass: "m-auto cursor-pointer rounded-full p-2 w-10 text-center"
+      itemClass: 'm-auto cursor-pointer rounded-full p-2 w-10 text-center',
     };
-  }
+  },
 };
 </script>

@@ -1,5 +1,5 @@
-import { MyDate } from '@/models/MyDate';
-import { TimeRange } from '@/models/TimeRange';
+import { MyDate } from "../DateTime/MyDate";
+import { TimeRange } from "../DateTime/TimeRange";
 
 export class WorkSlotModel {
   date: MyDate;

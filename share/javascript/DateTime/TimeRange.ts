@@ -1,4 +1,4 @@
-import { Time } from '@/models/Time';
+import { Time } from "./Time";
 
 export class TimeRange {
   startTime: Time;

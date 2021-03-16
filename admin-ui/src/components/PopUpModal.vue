@@ -35,12 +35,12 @@ export default {
   props: {
     title: {
       type: String,
-      required: true
+      required: true,
     },
     confirmButtonText: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   setup(_, context) {
     const firstClose = ref(true);
@@ -52,8 +52,8 @@ export default {
       }
     }
     return {
-      close
+      close,
     };
-  }
+  },
 };
 </script>

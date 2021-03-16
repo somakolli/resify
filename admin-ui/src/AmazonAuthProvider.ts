@@ -1,7 +1,7 @@
 import { Auth } from '@aws-amplify/auth';
-import { messages } from '@/stores/Messages';
+import { messages } from '@share/stores/Messages';
 import { localeConfig } from '@/config/locale-config';
-import { AuthProvider } from "@/helpers/auth/AuthProvider";
+import { AuthProvider } from '@share/helpers/auth/AuthProvider';
 
 export class AmazonAuthProvider implements AuthProvider {
   async getIdToken() {
@@ -59,7 +59,7 @@ export class AmazonAuthProvider implements AuthProvider {
     return { emailError, passwordError, overallError };
   }
   async signIn(username: string, password: string) {
-    await Auth.signIn(username, password).catch(error => {
+    await Auth.signIn(username, password).catch((error) => {
       throw this.errorHandler(error);
     });
   }

@@ -10,6 +10,6 @@ export default {
     const router = useRouter();
     authProvider.signOut().then(() => console.log('signOut'));
     router.push({ name: 'Login' });
-  }
+  },
 };
 </script>

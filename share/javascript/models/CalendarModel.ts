@@ -1,5 +1,5 @@
-import { ConfigWorkSlot } from '@/models/WorkSlotModel';
-import { Service } from '@/models/Service';
+import { ConfigWorkSlot } from "./WorkSlotModel";
+import { Service } from "./Service";
 
 export default class CalendarModel {
   id: string;

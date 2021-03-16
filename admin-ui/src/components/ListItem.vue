@@ -12,39 +12,39 @@
   </div>
 </template>
 <script lang="ts">
-import Icon from "./Icon.vue";
-import { computed } from "vue";
+import Icon from './Icon.vue';
+import { computed } from 'vue';
 export default {
   components: { Icon },
   props: {
     sideContent: {
       type: String,
-      required: false
+      required: false,
     },
     mainContent: {
       type: String,
-      required: true
+      required: true,
     },
     iconName: {
       type: String,
-      required: false
+      required: false,
     },
     showIcon: {
       type: Boolean,
-      required: false
-    }
+      required: false,
+    },
   },
   setup(props: any) {
     const mainContentTrimmed = computed(() => {
       if (props.mainContent.length > 16) {
-        return props.mainContent.slice(0, 14) + " ...";
+        return props.mainContent.slice(0, 14) + ' ...';
       } else {
         return props.mainContent;
       }
     });
     return {
-      mainContentTrimmed
+      mainContentTrimmed,
     };
-  }
+  },
 };
 </script>

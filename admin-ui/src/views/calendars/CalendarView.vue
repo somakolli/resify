@@ -43,33 +43,32 @@
 </template>
 <script lang="ts">
 import Configuration from './configuration/Configuration.vue';
-import { MyDate } from '@/models/MyDate';
-import CalendarModel from '../../models/CalendarModel';
-import Icon from '../../components/Icon.vue';
-import CalendarDay from '../../components/CalendarDay.vue';
-import DaySelect from '../../components/DaySelect.vue';
-import { useRouter } from 'vue-router';
+import { MyDate } from '@share/DateTime/MyDate';
+import CalendarModel from '@share/models/CalendarModel';
+import Icon from '@/components/Icon.vue';
+import CalendarDay from '@/components/CalendarDay.vue';
+import DaySelect from '@/components/DaySelect.vue';
 import { ref } from 'vue';
-import { getDataAuthenticated } from '@/helpers/HttpHelper';
 import { url } from '@/config/url-config';
-import { CalendarService } from '@/services/CalendarService';
+import { CalendarService } from '@share/services/CalendarService';
+import { authProvider } from '@/config/auth-config';
 
 export default {
   components: { CalendarDay, DaySelect, Configuration, Icon },
   setup(props) {
-    const calendarService = new CalendarService();
+    const calendarService = new CalendarService(url, authProvider);
     const calendar = ref<CalendarModel>();
     const calendarResponse = calendarService.getCalendar(props.route);
     calendar.value = new CalendarModel(calendarResponse);
     return {
-      calendar
+      calendar,
     };
   },
   props: {
     route: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -87,14 +86,14 @@ export default {
         'September',
         'Oktober',
         'November',
-        'Dezember'
+        'Dezember',
       ],
       selectedDate: new MyDate(
         new Date(Date.now()).getFullYear(),
         new Date(Date.now()).getMonth(),
         new Date(Date.now()).getDate()
       ),
-      selectedMonth: 0
+      selectedMonth: 0,
     };
   },
   methods: {
@@ -105,7 +104,7 @@ export default {
     hideConfig() {
       this.configVisibleClass = 'hidden xl:flex';
       this.calendarVisibleClass = 'flex';
-    }
-  }
+    },
+  },
 };
 </script>

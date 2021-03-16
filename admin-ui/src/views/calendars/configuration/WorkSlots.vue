@@ -68,30 +68,32 @@
 import Icon from '../../../components/Icon.vue';
 import { ref } from 'vue';
 import WorkSlot from '../../../components/WorkSlot.vue';
-import { WorkSlotDay } from '@/models/WorkSlotDay';
-import CalendarHelper from '@/helpers/CalendarHelper';
+import { WorkSlotDay } from '@share/models/WorkSlotDay';
+import CalendarHelper from '@share/helpers/CalendarHelper';
 import { localeConfig } from '@/config/locale-config';
-import { CalendarService } from '@/services/CalendarService';
+import { CalendarService } from '@share/services/CalendarService';
 import PopUpModal from '@/components/PopUpModal.vue';
 import TimeInput from '@/components/TimeInput.vue';
-import { Time } from '@/models/Time';
-import { WorkSlotService } from '@/services/WorkSlotService';
-import { ConfigWorkSlot } from '@/models/WorkSlotModel';
-import { TimeRange } from '@/models/TimeRange';
+import { WorkSlotService } from '@share/services/WorkSlotService';
+import { ConfigWorkSlot } from '@share/models/WorkSlotModel';
 import Button from '@/components/Button.vue';
+import { Time } from '@share/DateTime/Time';
+import { TimeRange } from '@share/DateTime/TimeRange';
+import { url } from '@/config/url-config';
+import { authProvider } from '@/config/auth-config';
 export default {
   components: { Button, TimeInput, PopUpModal, WorkSlot, Icon },
   props: {
     route: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   setup(props) {
     const addWorkSlot = ref(false);
     const startTime = ref(Time.fromDate(new Date(Date.now())));
     const endTime = ref(Time.fromDate(new Date(Date.now())));
-    const workSlotService = new WorkSlotService(props.route);
+    const workSlotService = new WorkSlotService(props.route, url, authProvider);
     const workSlotDays = ref<WorkSlotDay[]>([]);
     const currentAddingDay = ref<number>(0);
     for (const name of CalendarHelper.getDayNames(
@@ -111,8 +113,8 @@ export default {
       );
       workSlotDays.value[day].workSlots.push(newWorkSlot);
     }
-    const calendarService = new CalendarService();
-    calendarService.getCalendar(props.route).then(calendar => {
+    const calendarService = new CalendarService(url, authProvider);
+    calendarService.getCalendar(props.route).then((calendar) => {
       for (const configWorkSlot of calendar.workSlotConfiguration) {
         const parsedWorkSlot = ConfigWorkSlot.fromServerResponse(
           configWorkSlot
@@ -121,7 +123,7 @@ export default {
       }
     });
     const editable = ref(new Array<boolean>(workSlotDays.value.length));
-    editable.value.forEach((value, index) => (editable.value[index] = false));
+    editable.value.forEach((_, index) => (editable.value[index] = false));
     return {
       workSlotDays,
       editable,
@@ -130,8 +132,8 @@ export default {
       endTime,
       createWorkSlot,
       currentAddingDay,
-      workSlotService
+      workSlotService,
     };
-  }
+  },
 };
 </script>

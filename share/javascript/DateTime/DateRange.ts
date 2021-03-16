@@ -1,4 +1,4 @@
-import { MyDate } from '@/models/MyDate';
+import { MyDate } from "./MyDate";
 
 export class DateRange {
   startDate: MyDate;
