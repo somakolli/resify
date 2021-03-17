@@ -1,79 +1,79 @@
 class IconRepository {
   public icons: Map<string, string> = new Map([
     [
-      "calendar",
+      'calendar',
       `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>`,
     ],
     [
-      "stats",
+      'stats',
       `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg>`,
     ],
     [
-      "addCalendar",
+      'addCalendar',
       `<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
           <path d="M6 5V3M6 3V1M6 3H14M6 3H3C2.46957 3 1.96086 3.21071 1.58579 3.58578C1.21071 3.96086 1 4.46957 1 5V17C1 17.5304 1.21071 18.0391 1.58579 18.4142C1.96086 18.7893 2.46957 19 3 19H17C17.5304 19 18.0391 18.7893 18.4142 18.4142C18.7893 18.0391 19 17.5304 19 17V5C19 4.46957 18.7893 3.96086 18.4142 3.58578C18.0391 3.21071 17.5304 3 17 3H14M14 5V3M14 3V1M10 8V11M10 11V14M10 11H13M10 11H7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
        </svg>`,
     ],
     [
-      "eye",
+      'eye',
       `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>`,
     ],
     [
-      "eye-off",
+      'eye-off',
       `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"></path></svg>`,
     ],
     [
-      "arrow-left",
+      'arrow-left',
       `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>`,
     ],
     [
-      "adjustments",
+      'adjustments',
       `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>`,
     ],
     [
-      "down",
+      'down',
       `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>`,
     ],
     [
-      "arrow-right",
+      'arrow-right',
       `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>`,
     ],
     [
-      "pencil",
+      'pencil',
       `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>`,
     ],
     [
-      "plus",
+      'plus',
       `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>`,
     ],
     [
-      "x-circle",
+      'x-circle',
       `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`,
     ],
     [
-      "trash",
+      'trash',
       `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>`,
     ],
     [
-      "information-circle",
+      'information-circle',
       `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`,
     ],
     [
-      "clipboard",
+      'clipboard',
       `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>`,
     ],
     [
-      "logout",
+      'logout',
       `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>`,
     ],
     [
-      "logo",
+      'logo',
       `<svg viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd" clip-rule="evenodd" d="M15 0C6.71573 0 0 6.71573 0 15V55C0 63.2843 6.71573 70 15 70H55C63.2843 70 70 63.2843 70 55V15C70 6.71573 63.2843 0 55 0H15ZM15 12.5C13.6193 12.5 12.5 13.6193 12.5 15V22.936C12.5 24.3167 13.6193 25.436 15 25.436C16.3807 25.436 17.5 24.3167 17.5 22.936V17.5H31.0362C32.4169 17.5 33.5362 16.3807 33.5362 15C33.5362 13.6193 32.4169 12.5 31.0362 12.5H15ZM24.5888 26.9C23.208 26.9 22.0888 28.0193 22.0888 29.4C22.0888 30.7807 23.208 31.9 24.5888 31.9H46.1841C47.5648 31.9 48.6841 30.7807 48.6841 29.4C48.6841 28.0193 47.5648 26.9 46.1841 26.9H24.5888ZM57.5 31.48C57.5 30.0993 56.3807 28.98 55 28.98C53.6193 28.98 52.5 30.0993 52.5 31.48V52.5H22.4671C21.0864 52.5 19.9671 53.6193 19.9671 55C19.9671 56.3807 21.0864 57.5 22.4671 57.5H55C56.3807 57.5 57.5 56.3807 57.5 55V31.48Z" fill="#047857"/>
        </svg>`,
     ],
     [
-      "name",
+      'name',
       `<svg width="121" height="50" viewBox="0 0 95 39" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M2.76001 27.6C2.44001 27.6 2.10668 27.5467 1.76001 27.44C1.44001 27.3333 1.17334 27.08 0.960007 26.68C0.746673 26.28 0.639999 25.6667 0.639999 24.84C0.639999 24.3067 0.68001 23.6267 0.76001 22.8C0.866676 21.9467 0.973335 21.12 1.08 20.32C1.29334 18.9866 1.48 17.52 1.64 15.92C1.82667 14.32 1.92 12.7333 1.92 11.16C1.92 10.6 1.90667 10.0133 1.88 9.39999C1.85334 8.78666 1.8 8.19998 1.72 7.63998C1.56 7.71998 1.37334 7.79997 1.16 7.87997C0.973337 7.93331 0.813341 7.95999 0.680008 7.95999C0.413341 7.95999 0.226677 7.82666 0.12001 7.56C0.0400104 7.26666 0 6.93333 0 6.56C0 5.70666 0.200006 5.02666 0.600006 4.51999C1.02667 3.98666 1.65333 3.50665 2.48 3.07999C3.57333 2.46665 4.73334 2.02665 5.96001 1.75998C7.21334 1.46665 8.4 1.31998 9.52 1.31998C11.1733 1.31998 12.64 1.61332 13.92 2.19998C15.2 2.78665 16.2 3.61333 16.92 4.67999C17.64 5.74666 18 7.02666 18 8.51999C18 10.0667 17.6267 11.44 16.88 12.64C16.16 13.84 15.2267 14.8266 14.08 15.6C12.96 16.3466 11.8133 16.84 10.64 17.08C11.0667 17.7467 11.52 18.4133 12 19.08C12.5067 19.7467 13.0133 20.3466 13.52 20.88C15.04 22.4533 16.5867 23.24 18.16 23.24C18.5867 23.24 18.96 23.2133 19.28 23.16C19.44 23.1333 19.5733 23.2 19.68 23.36C19.8133 23.4933 19.88 23.7733 19.88 24.2C19.88 24.7066 19.7733 25.2266 19.56 25.76C19.3467 26.2666 18.9867 26.6933 18.48 27.04C17.9733 27.3866 17.28 27.56 16.4 27.56C15.36 27.56 14.36 27.2133 13.4 26.52C12.4667 25.8267 11.6 24.9466 10.8 23.88C10 22.7866 9.28 21.64 8.64 20.44C8.02667 19.24 7.50667 18.1333 7.08 17.12C6.97334 16.8267 6.88 16.5467 6.8 16.28C6.72 15.9867 6.68001 15.7067 6.68001 15.44C6.68001 14.9867 6.82668 14.6133 7.12001 14.32C7.33334 14.1066 7.62667 13.96 8 13.88C8.4 13.8 8.97333 13.76 9.72 13.76C11.1333 13.76 12.28 13.3733 13.16 12.6C14.04 11.8266 14.48 10.8266 14.48 9.59998C14.48 8.26664 13.9733 7.29333 12.96 6.67999C11.9733 6.06666 10.76 5.75998 9.32001 5.75998C8.14667 5.75998 6.92 5.94664 5.64 6.31998C5.56 8.05331 5.37334 10.04 5.08 12.28C4.92 13.6133 4.77333 14.9333 4.64 16.24C4.53333 17.5467 4.48 18.7333 4.48 19.8C4.48 20.7333 4.56 21.56 4.72 22.28C4.90667 22.9733 5.26667 23.5733 5.8 24.08C6.17334 24.4533 6.36 24.8533 6.36 25.28C6.36 25.8667 6.02667 26.4 5.36 26.88C4.69333 27.36 3.82668 27.6 2.76001 27.6Z" fill="#047857"/>
         <path d="M27.9999 27.72C25.9733 27.72 24.3866 27.1467 23.2399 26C22.1199 24.8267 21.5599 23.2 21.5599 21.12C21.5599 19.2267 21.9733 17.5067 22.7999 15.96C23.6266 14.4133 24.7333 13.1867 26.1199 12.28C27.5333 11.3467 29.0799 10.88 30.7599 10.88C32.3599 10.88 33.6399 11.28 34.5999 12.08C35.5599 12.8533 36.0399 13.8933 36.0399 15.2C36.0399 16.24 35.7199 17.2 35.0799 18.08C34.4399 18.96 33.5866 19.6666 32.5199 20.2C31.4533 20.7066 30.2666 20.96 28.9599 20.96C27.3599 20.96 26.0533 20.6 25.0399 19.88C25.0666 21.1066 25.4799 22.0933 26.2799 22.84C27.1066 23.5867 28.1599 23.96 29.4399 23.96C30.2133 23.96 30.9999 23.8267 31.7999 23.56C32.6266 23.2667 33.3333 22.88 33.9199 22.4C34.2933 22.08 34.6399 21.92 34.9599 21.92C35.2266 21.92 35.4399 22.0133 35.5999 22.2C35.7866 22.36 35.8799 22.5733 35.8799 22.84C35.8799 23.4267 35.3733 24.2 34.3599 25.16C32.5733 26.8667 30.4533 27.72 27.9999 27.72ZM28.5999 18.32C29.5599 18.32 30.3599 18.12 30.9999 17.72C31.6399 17.32 31.9599 16.8133 31.9599 16.2C31.9599 15.6933 31.7466 15.3066 31.3199 15.04C30.8933 14.7466 30.3066 14.6 29.5599 14.6C28.5733 14.6 27.7066 14.8667 26.9599 15.4C26.2399 15.9067 25.7199 16.6267 25.3999 17.56C25.7733 17.8 26.2533 17.9867 26.8399 18.12C27.4266 18.2533 28.0133 18.32 28.5999 18.32Z" fill="#047857"/>
@@ -84,7 +84,7 @@ class IconRepository {
       </svg>`,
     ],
     [
-      "exclamation-circle",
+      'exclamation-circle',
       `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`,
     ],
   ]);
