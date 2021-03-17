@@ -49,7 +49,7 @@
 <script lang="ts">
 import { useRoute, useRouter } from 'vue-router';
 
-import Icon from '../components/Icon.vue';
+import Icon from '@components/Icon.vue';
 import { authProvider } from '@/config/auth-config';
 export default {
   components: { Icon },

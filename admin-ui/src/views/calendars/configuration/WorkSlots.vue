@@ -65,7 +65,7 @@
   </div>
 </template>
 <script lang="ts">
-import Icon from '../../../components/Icon.vue';
+import Icon from '@components/Icon.vue';
 import { ref } from 'vue';
 import WorkSlot from '../../../components/WorkSlot.vue';
 import { WorkSlotDay } from '@share/models/WorkSlotDay';

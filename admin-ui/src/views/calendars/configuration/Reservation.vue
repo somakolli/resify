@@ -21,7 +21,7 @@
   </div>
 </template>
 <script>
-import Icon from '../../../components/Icon.vue';
+import Icon from '@components/Icon.vue';
 import ListItem from '../../../components/ListItem.vue';
 import { ref } from 'vue';
 export default {

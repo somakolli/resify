@@ -94,7 +94,7 @@
 
 <script lang="ts">
 import CalendarHelper from '@share/helpers/CalendarHelper';
-import Icon from './Icon.vue';
+import Icon from '@components/Icon.vue';
 import { ref, computed, watchEffect } from 'vue';
 import { MyDate } from '@share/DateTime/MyDate';
 export default {

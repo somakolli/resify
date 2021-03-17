@@ -12,7 +12,7 @@
   </div>
 </template>
 <script lang="ts">
-import Icon from './Icon.vue';
+import Icon from '@components/Icon.vue';
 import { computed } from 'vue';
 export default {
   components: { Icon },

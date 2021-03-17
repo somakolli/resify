@@ -16,7 +16,8 @@
     "types": ["webpack-env", "jest"],
     "paths": {
       "@/*": ["src/*"],
-      "@share/*": ["../share/javascript/*"]
+      "@share/*": ["../share/javascript/*"],
+      "@components/*": ["src/bit/*"]
     },
     "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
   },

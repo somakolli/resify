@@ -50,7 +50,7 @@
   </div>
 </template>
 <script lang="ts">
-import Icon from '@/components/Icon.vue';
+import Icon from '@components/Icon.vue';
 import { ref } from 'vue';
 import { Service } from '@share/models/Service';
 import ListItem from '@/components/ListItem.vue';

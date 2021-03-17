@@ -55,7 +55,7 @@ import { localeConfig } from '@/config/locale-config';
 import { messages } from '@share/stores/Messages';
 import { authProvider } from '@/config/auth-config';
 import Button from '@/components/Button.vue';
-import Icon from '@/components/Icon.vue';
+import Icon from '@components/Icon.vue';
 
 export default {
   components: { PopUpModal, Button, LabelInput, Icon },

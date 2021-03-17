@@ -45,7 +45,7 @@
 import Configuration from './configuration/Configuration.vue';
 import { MyDate } from '@share/DateTime/MyDate';
 import CalendarModel from '@share/models/CalendarModel';
-import Icon from '@/components/Icon.vue';
+import Icon from '@components/Icon.vue';
 import CalendarDay from '@/components/CalendarDay.vue';
 import DaySelect from '@/components/DaySelect.vue';
 import { ref } from 'vue';

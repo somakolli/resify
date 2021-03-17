@@ -27,7 +27,7 @@
 import CalendarModel from '@share/models/CalendarModel';
 import Button from './Button.vue';
 import Card from './Card.vue';
-import Icon from './Icon.vue';
+import Icon from '@components/Icon.vue';
 export default {
   components: {
     Button,

@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { iconRepository } from '@share/stores/IconRepository';
+import { iconRepository } from './IconRepository';
 export default defineComponent({
   name: 'Icon',
   props: {

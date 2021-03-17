@@ -39,7 +39,7 @@
 </template>
 <script lang="ts">
 import Calendar from '../../components/Calendar.vue';
-import Icon from '../../components/Icon.vue';
+import Icon from '@components/Icon.vue';
 import LabelInput from '../../components/LabelInput.vue';
 import PopUpModal from '../../components/PopUpModal.vue';
 import CalendarModel from '@share/models/CalendarModel';

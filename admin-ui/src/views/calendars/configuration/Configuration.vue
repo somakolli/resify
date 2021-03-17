@@ -20,7 +20,7 @@
   </div>
 </template>
 <script>
-import Icon from '../../../components/Icon.vue';
+import Icon from '@components/Icon.vue';
 import TabMenu from '../../../components/TabMenu.vue';
 import CalendarModel from '@share/models/CalendarModel';
 export default {
