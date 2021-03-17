@@ -90,4 +90,4 @@ sw.*
 *.swp
 
 # shared components
-shared-components
+components/shared-components

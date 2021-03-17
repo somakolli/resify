@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { iconRepository } from "./IconRepository";
-import { ref } from "vue";
+import { ref } from "composition-api-source";
 export default {
   name: "Icon",
   props: {
@@ -15,7 +15,7 @@ export default {
   },
   setup(props: any) {
     const svg = ref("");
-    svg.value = iconRepository.icons.get(props.iconName);
+    svg.value = iconRepository.icons.get(props.iconName)!.toString();
     return {
       svg,
     };

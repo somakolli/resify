@@ -7,11 +7,12 @@
     "build": "yarn installdep && nuxt-ts build",
     "start": "nuxt-ts start",
     "generate": "nuxt-ts generate",
-    "installdep": "cd ../share/javascript && yarn install && cd ../../customer-ui && mkdir -p shared-components && ln -f ../share/components/* shared-components"
+    "installdep": "cd ../share/javascript && yarn install && cd ../../customer-ui && ./generateSharedComponents.sh"
   },
   "dependencies": {
     "@nuxt/http": "^0.6.4",
     "@nuxt/typescript-runtime": "^2.0.1",
+    "@nuxtjs/composition-api": "^0.22.1",
     "core-js": "^3.8.3",
     "nuxt": "^2.14.12"
   },
