@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "nuxt-ts",
-    "build": "nuxt-ts build",
+    "dev": "yarn installdep && nuxt-ts",
+    "build": "yarn installdep && nuxt-ts build",
     "start": "nuxt-ts start",
-    "generate": "nuxt-ts generate"
+    "generate": "nuxt-ts generate",
+    "installdep": "cd ../share/javascript && yarn install && cd ../../customer-ui && mkdir -p shared-components && ln -f ../share/components/* shared-components"
   },
   "dependencies": {
     "@nuxt/http": "^0.6.4",

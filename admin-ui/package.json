@@ -8,7 +8,7 @@
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint",
-    "installdep": "cd ../share/javascript && yarn install && cd ../../admin-ui"
+    "installdep": "cd ../share/javascript && yarn install && cd ../../admin-ui && mkdir -p src/shared-components && ln -f ../share/components/* src/shared-components"
   },
   "dependencies": {
     "@aws-amplify/auth": "^3.4.25",
