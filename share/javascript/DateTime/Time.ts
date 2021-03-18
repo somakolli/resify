@@ -7,7 +7,7 @@ export class Time {
   public static fromDate(date: Date): Time {
     return new Time(date.getHours(), date.getMinutes());
   }
-  public static fromServerResponse(serverReponse) {
+  public static fromServerResponse(serverReponse: any) {
     return this.fromString(serverReponse);
   }
   public static fromString(timeString: string): Time {

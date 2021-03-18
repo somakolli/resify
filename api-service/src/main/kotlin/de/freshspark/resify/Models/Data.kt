@@ -51,6 +51,18 @@ data class Reservation
 )
 
 @Entity
+data class Company(
+  @Id @GeneratedValue
+  var companyId: UUID? = null,
+  var name: String? = null,
+  var description: String? = null,
+  @OneToOne
+  var owner: ResifyUser? = null,
+  @OneToMany
+  var users: MutableCollection<ResifyUser> = mutableListOf()
+)
+
+@Entity
 data class Service(
     @Id @GeneratedValue
     var serviceId: UUID? = null,

@@ -11,9 +11,9 @@ export class WorkSlotModel {
 }
 
 export class ConfigWorkSlot {
-  day: number;
-  timeRange: TimeRange;
-  static fromServerResponse(serverResponse) {
+  day?: number;
+  timeRange?: TimeRange;
+  static fromServerResponse(serverResponse: any) {
     const configWorkSlot = new ConfigWorkSlot();
     configWorkSlot.day = serverResponse.weekDay;
     configWorkSlot.timeRange = TimeRange.fromServerResponse(

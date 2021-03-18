@@ -26,9 +26,9 @@ export class Reservation {
 
   toLocalString(locale: string): string {
     return (
-      this.timeRange.startTime.getLocaleString(locale) +
+      this.timeRange.startTime!.getLocaleString(locale) +
       " - " +
-      this.timeRange.endTime.getLocaleString(locale)
+      this.timeRange.endTime!.getLocaleString(locale)
     );
   }
 }

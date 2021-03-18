@@ -27,8 +27,8 @@ export class WorkSlotService {
       {
         weekDay: workSlot.day,
         timeRange: {
-          startTime: workSlot.timeRange.startTime.getLocaleString("de"),
-          endTime: workSlot.timeRange.endTime.getLocaleString("de"),
+          startTime: workSlot.timeRange!.startTime!.getLocaleString("de"),
+          endTime: workSlot.timeRange!.endTime!.getLocaleString("de"),
         },
       }
     );

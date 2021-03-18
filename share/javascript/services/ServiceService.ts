@@ -15,7 +15,7 @@ export class ServiceService {
     this.httpHelper = new HttpHelper(authProvider);
   }
   async createService(service: Service): Promise<Service> {
-    service.serviceId = null;
+    service.serviceId = "";
     return this.httpHelper.postDataAuthenticated<Service, Service>(
       this.url,
       service

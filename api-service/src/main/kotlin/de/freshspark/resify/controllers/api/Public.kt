@@ -10,6 +10,10 @@ class CalendarController(val calendarRepository: CalendarRepository) {
     @GetMapping("")
     fun getCalendars(@PathVariable company: String) =
         calendarRepository.findAllByResifyUserEmail(company)
+    
+    @GetMapping("/{route}")
+    fun getCalendar(@PathVariable route: String) = 
+      calendarRepository.findByRoute(route)
 }
 
 @RestController
