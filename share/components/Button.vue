@@ -1,5 +1,6 @@
 <template>
   <div
+    @click="$emit('click')"
     :class="{
       'border border-green-700 text-green-700': primary,
       'shadow-none': text,
@@ -11,6 +12,7 @@
 </template>
 <script lang="ts">
 export default {
+  emits: ["click"],
   props: {
     primary: {
       type: Boolean,

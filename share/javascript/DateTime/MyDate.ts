@@ -27,6 +27,9 @@ export class MyDate {
   static fromServerResponse(response: any) {
     return this.fromString(response);
   }
+  static today() {
+    return this.fromDate(new Date(Date.now()));
+  }
   addDay(value: number) {
     const tempDate = this.toDate();
     tempDate.setDate(tempDate.getDate() + value);

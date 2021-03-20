@@ -3,8 +3,8 @@
     <router-link :to="'/calendars/' + calendar.route + '/workslots'">
       <div class="flex flex-row justify-between mt-2.5 px-4">
         <span class="font-semibold">{{ calendar.calendarName }}</span>
-        <Icon v-if="calendar.published" icon-name="eye"></Icon>
-        <Icon v-if="!calendar.published" icon-name="eye-of"></Icon>
+        <Icon v-if="calendar.published" icon-name="calendar"></Icon>
+        <Icon v-if="!calendar.published" icon-name="calendar"></Icon>
       </div>
       <div class="text-sm flex flex-col ml-5 mt-3">
         <span class="font-light">created at: {{ calendar.createdAt }}</span>

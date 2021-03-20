@@ -3,12 +3,33 @@
     <div class="w-10/12 mt-5 flex flex-col items-center">
       <div class="font-bold text-xl">{{ calendar.calendarName }}</div>
       <ServiceSelector
+        v-if="reservationState === ReservationState.Service"
         class="w-full mt-5"
         :calendar="calendar"
       ></ServiceSelector>
+      <ReservationSelector
+        v-else-if="reservationState === ReservationState.Date"
+        class="w-full mt-5"
+      ></ReservationSelector>
+      <PersonalInformationEntry
+        v-else-if="reservationState === ReservationState.PersonalInformation"
+        class="w-full mt-5"
+      ></PersonalInformationEntry>
+      <Summary
+        v-else-if="reservationState === ReservationState.Summary"
+        class="w-full mt-5"
+      ></Summary>
     </div>
     <div class="w-full flex flex-col items-center mb-5">
-      <Button primary class="w-32 h-10">Next</Button>
+      <Button
+        v-if="reservationState === ReservationState.Summary"
+        primary
+        class="w-32 h-10"
+        >Confirm</Button
+      >
+      <Button v-else @click="reservationState++" primary class="w-32 h-10"
+        >Next</Button
+      >
     </div>
   </div>
 </template>
@@ -17,7 +38,9 @@
 import { computed, ref } from "@vue/composition-api";
 import ListItem from "@/components/ListItem.vue";
 import Button from "@/components/shared-components/Button.vue";
-
+import ReservationSelector from "@/components/ReservationSelector.vue";
+import PersonalInformationEntry from "@/components/PersonalInformationEntry.vue";
+import Summary from "@/components/Summary.vue";
 export const selectedServices = ref(new Array(0));
 export const totalDuration = computed(() => {
   let returnDuration = 0;
@@ -26,13 +49,33 @@ export const totalDuration = computed(() => {
   }
   return returnDuration;
 });
-
+enum ReservationState {
+  Service = 0,
+  Date = 1,
+  PersonalInformation = 2,
+  Summary = 3,
+}
 export default {
-  components: { ListItem, Button },
+  components: {
+    ListItem,
+    Button,
+    ReservationSelector,
+    PersonalInformationEntry,
+    Summary,
+  },
 
   setup() {
-    return { selectedServices, totalDuration };
+    const reservationState = ref(ReservationState.Service);
+    const numberOfSteps = 4;
+    return {
+      selectedServices,
+      totalDuration,
+      reservationState,
+      ReservationState,
+      numberOfSteps,
+    };
   },
+  // this gets executed on the server
   async asyncData({ params, $http }: any) {
     //TODO: get calendar from previous request
     const calendar = await $http.$get(

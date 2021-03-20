@@ -88,11 +88,7 @@ export default {
         'November',
         'Dezember',
       ],
-      selectedDate: new MyDate(
-        new Date(Date.now()).getFullYear(),
-        new Date(Date.now()).getMonth(),
-        new Date(Date.now()).getDate()
-      ),
+      selectedDate: MyDate.today(),
       selectedMonth: 0,
     };
   },
