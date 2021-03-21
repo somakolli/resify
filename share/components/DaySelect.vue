@@ -95,7 +95,7 @@
 <script lang="ts">
 import CalendarHelper from "@/shared-modules/helpers/CalendarHelper";
 import Icon from "@/components/shared-components/Icon.vue";
-import { ref, computed, watchEffect } from "composition-api-source";
+import { ref, computed, watchEffect } from "@vue/composition-api";
 import { MyDate } from "@/shared-modules/DateTime/MyDate";
 export default {
   components: { Icon },
@@ -148,6 +148,7 @@ export default {
     });
     function addMonth(monthsToAdd: number) {
       shownDate.value = CalendarHelper.addMonths(shownDate.value, monthsToAdd);
+      console.log(shownDate);
     }
     function updateSelectedDate(year: number, month: number, day: number) {
       context.emit("update:selectedDate", new MyDate(year, month, day));
@@ -160,10 +161,9 @@ export default {
         new Date(shownDate.value.getFullYear(), shownDate.value.getMonth(), 1)
       );
     });
-    watchEffect(() => {
-      const tempDate = props.selectedDate;
-      shownDate.value = new Date(tempDate.year, tempDate.month, tempDate.day);
-    });
+    function updateShownDate(year: number, month: number, day: number) {
+      shownDate.value = new Date(year, month, day);
+    }
     function isSelectedDate(day: number): boolean {
       return (
         props.selectedDate.year === shownDate.value.getFullYear() &&
@@ -185,10 +185,13 @@ export default {
       previousMonthNumberOfDays,
       lastDay,
       isSelectedDate,
+      updateShownDate,
     };
   },
   methods: {},
-  watch: {},
+  watch: {
+    selectedDate: function (val: any) {},
+  },
   data() {
     return {
       showSelection: false,

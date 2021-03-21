@@ -2,9 +2,8 @@
   <div class="flex flex-col">
     <span class="font-bold self-center text-xl">Select Date and Time</span>
     <DaySelect
-      :modelValue="selectedDate"
-      @update:modelValue="selectedDate"
-      update:ModelValue="selectedDate"
+      :selectedDate="selectedDate"
+      @update:selectedDate="logSelectedDate($event)"
     ></DaySelect>
   </div>
 </template>
@@ -18,8 +17,13 @@ export default {
   components: { DaySelect },
   setup() {
     const selectedDate = ref(MyDate.today());
+    function logSelectedDate(event: MyDate) {
+      selectedDate.value = event;
+    }
     return {
       selectedDate,
+      today: MyDate.fromString("2021-03-01"),
+      logSelectedDate,
     };
   },
 };

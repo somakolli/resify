@@ -1,5 +1,5 @@
 <template>
-  <div class="text-gray-800" v-html="svg"></div>
+  <div @click="$emit('click')" class="text-gray-800" v-html="svg"></div>
 </template>
 
 <script lang="ts">
@@ -7,6 +7,7 @@ import { iconRepository } from "./IconRepository";
 import { ref } from "composition-api-source";
 export default {
   name: "Icon",
+  emits: ["click"],
   props: {
     iconName: {
       type: String,
