@@ -1,10 +1,7 @@
-package com.reservationappservice.logic
+package de.freshspark.resify.logic
 
-import com.reservationappservice.Models.*
-import de.freshspark.resify.Models.DateRange
-import java.time.LocalDate
+import de.freshspark.resify.models.*
 import java.util.*
-import kotlin.math.floor
 
 fun checkIfReservationValid(reservations: List<Reservation>,
                             reservationCandidate: Reservation): Boolean {

@@ -1,8 +1,8 @@
-package com.reservationappservice.Controllers.api
+package de.freshspark.resify.controllers.api
 
-import com.reservationappservice.Models.ReservationsCalendar
-import com.reservationappservice.Models.WorkSlot
 import de.freshspark.resify.DataIntegrityViolationException
+import de.freshspark.resify.SecurityInterceptor
+import de.freshspark.resify.models.WorkSlot
 import de.freshspark.resify.repositories.CalendarRepository
 import de.freshspark.resify.repositories.WorkSlotRepository
 import org.springframework.http.HttpStatus
@@ -15,14 +15,17 @@ import kotlin.NoSuchElementException
 @RequestMapping("/api/calendars/{calendarRoute}/workslots")
 class WorkSlotController(
     private val calendarRepository: CalendarRepository,
-    private val workSlotRepository: WorkSlotRepository
+    private val workSlotRepository: WorkSlotRepository,
+    val securityInterceptor: SecurityInterceptor
 ) {
     @PostMapping()
     fun createWorkSlot(
-        @RequestBody workSlot: WorkSlot,
+        @RequestBody workSlot: WorkSlot
+        ,
         @PathVariable calendarRoute: String
     ): WorkSlot {
-        val calendar = calendarRepository.findByRoute(calendarRoute)
+        val company = securityInterceptor.company
+        val calendar = calendarRepository.findByRouteAndCompany(calendarRoute, company)
             ?: throw NoSuchElementException("calendar not found");
         val workSlots = workSlotRepository.findByCalendarAndDay(
             calendar,
@@ -43,7 +46,8 @@ class WorkSlotController(
         @PathVariable day: String
     ): List<WorkSlot> {
         val dayDate = LocalDate.parse(day)
-        val calendar = calendarRepository.findByRoute(calendarRoute)?:
+        val company = securityInterceptor.company
+        val calendar = calendarRepository.findByRouteAndCompany(calendarRoute, company)?:
             throw NoSuchElementException("calendar not found")
         return workSlotRepository.findByCalendarAndDay(calendar, dayDate)
     }

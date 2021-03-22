@@ -1,4 +1,4 @@
-package de.freshspark.resify.controllers.api
+package de.freshspark.resify.controllers.api.public
 
 import de.freshspark.resify.repositories.CalendarRepository
 import de.freshspark.resify.repositories.UserRepository
@@ -9,11 +9,19 @@ import org.springframework.web.bind.annotation.*
 class CalendarController(val calendarRepository: CalendarRepository) {
     @GetMapping("")
     fun getCalendars(@PathVariable company: String) =
-        calendarRepository.findAllByResifyUserEmail(company)
+        calendarRepository.findAllByCompanyName(company)
     
     @GetMapping("/{route}")
-    fun getCalendar(@PathVariable route: String) = 
-      calendarRepository.findByRoute(route)
+    fun getCalendar(@PathVariable route: String, @PathVariable company: String) =
+      calendarRepository.findByRouteAndCompanyName(route, company)
+
+    @GetMapping("/{route}/reservations")
+    fun getRecommendedReservations(
+      @PathVariable company: String,
+      @PathVariable calendarRoute: String, 
+      @RequestParam date: String) {
+          
+    }
 }
 
 @RestController

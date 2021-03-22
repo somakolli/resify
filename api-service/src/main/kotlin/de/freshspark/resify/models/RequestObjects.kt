@@ -1,4 +1,4 @@
-package de.freshspark.resify.Models
+package de.freshspark.resify.models
 
 import java.time.LocalDate
 

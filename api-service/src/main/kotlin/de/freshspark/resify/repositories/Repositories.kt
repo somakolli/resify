@@ -1,6 +1,6 @@
 package de.freshspark.resify.repositories
 
-import com.reservationappservice.Models.*
+import de.freshspark.resify.models.*
 import org.springframework.data.jpa.repository.JpaRepository
 import java.time.LocalDate
 import java.util.*
@@ -11,9 +11,10 @@ interface UserRepository : JpaRepository<ResifyUser, UUID> {
 }
 
 interface CalendarRepository : JpaRepository<ReservationsCalendar, UUID> {
-    fun findAllByResifyUser(resifyUser: ResifyUser): List<ReservationsCalendar>
-    fun findByRoute(route: String): ReservationsCalendar?
-    fun findAllByResifyUserEmail(email: String): List<ReservationsCalendar>?
+    fun findByRouteAndCompany(route: String, company: Company): ReservationsCalendar?
+    fun findByRouteAndCompanyName(route: String, companyName: String): ReservationsCalendar?
+    fun findAllByCompany(company: Company): List<ReservationsCalendar>?
+    fun findAllByCompanyName(companyName: String): List<ReservationsCalendar>?
 }
 
 interface WorkSlotRepository : JpaRepository<WorkSlot, UUID> {
@@ -28,4 +29,7 @@ interface ConfigurationWorkSlotsRepository :
 }
 
 interface ReservationRepository : JpaRepository<Reservation, UUID> {
+}
+
+interface CompanyRepository: JpaRepository<Company, UUID> {
 }

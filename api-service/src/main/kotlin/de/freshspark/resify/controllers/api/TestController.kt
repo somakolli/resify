@@ -1,4 +1,4 @@
-package com.reservationappservice.Controllers.api
+package de.freshspark.resify.controllers.api
 
 import de.freshspark.resify.repositories.UserRepository
 import org.springframework.web.bind.annotation.GetMapping

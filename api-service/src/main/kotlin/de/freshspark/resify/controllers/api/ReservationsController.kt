@@ -1,12 +1,12 @@
-package com.reservationappservice.Controllers.api
+package de.freshspark.resify.controllers.api
 
-import com.reservationappservice.Models.Reservation
-import com.reservationappservice.logic.checkIfTimeRangeInWorkSlot
+import de.freshspark.resify.models.*
 import de.freshspark.resify.DataIntegrityViolationException
+import de.freshspark.resify.SecurityInterceptor
+import de.freshspark.resify.logic.checkIfTimeRangeInWorkSlot
 import de.freshspark.resify.repositories.CalendarRepository
 import de.freshspark.resify.repositories.ReservationRepository
 import de.freshspark.resify.repositories.WorkSlotRepository
-import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 import kotlin.NoSuchElementException
@@ -17,13 +17,15 @@ class ReservationsController(
     val reservationsRepository: ReservationRepository,
     val calendarRepository: CalendarRepository,
     val workSlotRepository: WorkSlotRepository,
+    val securityInterceptor: SecurityInterceptor
 ) {
     @GetMapping()
     fun getReservations(
         @RequestParam day: String,
         @PathVariable calendarRoute: String
     ): Iterable<Reservation> {
-        val calendar = calendarRepository.findByRoute(calendarRoute)
+        val company = securityInterceptor.currentUser.company!!
+        val calendar = calendarRepository.findByRouteAndCompany(calendarRoute, company )
             ?: throw NoSuchElementException("calendar route")
         val workSlots = workSlotRepository.findByCalendarAndDay(calendar, LocalDate.parse(day))
         return workSlots.flatMap { it.reservations }
@@ -34,7 +36,8 @@ class ReservationsController(
         @RequestBody reservation: Reservation,
         @PathVariable calendarRoute: String
     ): Reservation {
-        val calendar = calendarRepository.findByRoute(calendarRoute)
+        val company = securityInterceptor.company
+        val calendar = calendarRepository.findByRouteAndCompany(calendarRoute, company)
             ?: throw NoSuchElementException("calendar");
         val workSlots =
             workSlotRepository.findByCalendarAndDay(calendar, reservation.day!!)
