@@ -2,7 +2,8 @@ package de.freshspark.resify.controllers.api
 
 import de.freshspark.resify.models.*
 import de.freshspark.resify.DataIntegrityViolationException
-import de.freshspark.resify.SecurityInterceptor
+import de.freshspark.resify.AuthenticationInterceptor
+import de.freshspark.resify.CompanyRequired
 import de.freshspark.resify.logic.checkIfTimeRangeInWorkSlot
 import de.freshspark.resify.repositories.CalendarRepository
 import de.freshspark.resify.repositories.ReservationRepository
@@ -17,14 +18,15 @@ class ReservationsController(
     val reservationsRepository: ReservationRepository,
     val calendarRepository: CalendarRepository,
     val workSlotRepository: WorkSlotRepository,
-    val securityInterceptor: SecurityInterceptor
+    val authenticationInterceptor: AuthenticationInterceptor
 ) {
     @GetMapping()
+    @CompanyRequired
     fun getReservations(
         @RequestParam day: String,
         @PathVariable calendarRoute: String
     ): Iterable<Reservation> {
-        val company = securityInterceptor.currentUser.company!!
+        val company = authenticationInterceptor.currentUser.company!!
         val calendar = calendarRepository.findByRouteAndCompany(calendarRoute, company )
             ?: throw NoSuchElementException("calendar route")
         val workSlots = workSlotRepository.findByCalendarAndDay(calendar, LocalDate.parse(day))
@@ -32,11 +34,12 @@ class ReservationsController(
     }
 
     @PostMapping
+    @CompanyRequired
     fun createReservation(
         @RequestBody reservation: Reservation,
         @PathVariable calendarRoute: String
     ): Reservation {
-        val company = securityInterceptor.company
+        val company = authenticationInterceptor.currentUser.company!!
         val calendar = calendarRepository.findByRouteAndCompany(calendarRoute, company)
             ?: throw NoSuchElementException("calendar");
         val workSlots =

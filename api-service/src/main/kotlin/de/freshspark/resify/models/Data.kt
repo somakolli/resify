@@ -10,6 +10,7 @@ import org.hibernate.annotations.LazyCollection
 import java.time.*
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
+import javax.json.bind.annotation.JsonbTransient
 import javax.persistence.*
 import kotlin.collections.mutableListOf
 
@@ -20,6 +21,23 @@ enum class Role {
 enum class Visibility {
   Public, Private
 }
+
+enum class PermissionScope {
+  All,
+  Fields
+}
+
+enum class PermissionType(val binNum: Int) {
+  Read(0b1),
+  Write(0b10)
+}
+
+@Entity
+open class Permission (
+  open var resource: UUID? = null,
+  open var permissionScope: PermissionScope = PermissionScope.All,
+  open var permissionType: PermissionType = PermissionType.Read
+    ) : ResifyObject()
 
 @Embeddable
 class PersonalInformation(
@@ -40,118 +58,112 @@ class TimeRange(
   }
 }
 
-@Entity
-data class Reservation
-  (
+@MappedSuperclass
+open class ResifyObject (
   @Id @GeneratedValue
-  var reservationId: UUID? = null,
-  var day: LocalDate? = null,
-  var timeRange: TimeRange? = null,
-  var personalInformation: PersonalInformation? = null,
-  @ManyToOne
-  @JsonIgnore
-  var workSlot: WorkSlot? = null,
-  @ManyToOne
-  var service: Service? = null
-)
+  open var id: UUID? = null
+    )
 
 @Entity
-data class Company(
-  @Id @GeneratedValue
-  var companyId: UUID? = null,
-  var name: String? = null,
-  var description: String? = null,
+open class Reservation
+  (
+  open var day: LocalDate? = null,
+  open var timeRange: TimeRange? = null,
+  open var personalInformation: PersonalInformation? = null,
+  @ManyToOne
+  @JsonbTransient
+  open var workSlot: WorkSlot? = null,
+  @ManyToOne
+  open var service: Service? = null
+): ResifyObject()
+
+@Entity
+open class Company(
+  open var name: String? = null,
+  open var description: String? = null,
   @OneToOne
-  var owner: ResifyUser? = null,
+  @JsonbTransient
+  @JsonIgnore
+  open var owner: ResifyUser? = null,
   @OneToMany
-  var admins: MutableCollection<ResifyUser> = mutableListOf(),
+  @JsonbTransient
+  open var admins: MutableCollection<ResifyUser> = mutableListOf(),
   @OneToMany
-  var users: MutableCollection<ResifyUser> = mutableListOf(),
-  var visibility: Visibility = Visibility.Private
-)
+  @JsonbTransient
+  open var users: MutableCollection<ResifyUser> = mutableListOf(),
+  open var visibility: Visibility = Visibility.Private
+): ResifyObject()
 
 @Entity
-data class Service(
-  @Id @GeneratedValue
-  var serviceId: UUID? = null,
-  var name: String? = null,
+open class Service(
+  open var name: String? = null,
   // length in minutes
-  var duration: Int? = 0,
+  open var duration: Int? = 0,
   @ManyToOne
-  @JsonIgnore
-  var calendar: ReservationsCalendar? = null
-)
+  @JsonbTransient
+  open var calendar: ReservationsCalendar? = null
+): ResifyObject()
 
 @Entity
-data class WorkSlot
+open class WorkSlot
   (
-  @Id @GeneratedValue
-  var workSlotId: UUID? = null,
-  var day: LocalDate? = null,
-  var timeRange: TimeRange? = null,
+  open var day: LocalDate? = null,
+  open var timeRange: TimeRange? = null,
   @ManyToOne
-  @JsonIgnore
-  var calendar: ReservationsCalendar? = null,
+  @JsonbTransient
+  open var calendar: ReservationsCalendar? = null,
   @OneToMany
-  var reservations: MutableCollection<Reservation> = mutableListOf()
-)
+  open var reservations: MutableCollection<Reservation> = mutableListOf()
+): ResifyObject()
 
 @Entity
-data class ConfigurationWorkSlot
+open class ConfigurationWorkSlot
   (
-  @Id @GeneratedValue
-  var workSlotId: UUID? = null,
   // Monday: 0, Tuesday: 1 ...
-  var weekDay: Byte = 0,
-  var timeRange: TimeRange? = null
-)
+  open var weekDay: Byte = 0,
+  open var timeRange: TimeRange? = null
+): ResifyObject()
 
 @Entity
 @Table(
-  uniqueConstraints = [UniqueConstraint(columnNames = ["company_companyid", "route"])]
+  uniqueConstraints = [UniqueConstraint(columnNames = ["company_id", "route"])]
 )
 @RegisterForReflection
-data class ReservationsCalendar
+open class ReservationsCalendar
   (
-  @Id @GeneratedValue
-  var calendarId: UUID? = null,
   @ManyToOne
-  @JsonIgnore
-  var company: Company? = null,
+  @JsonbTransient
+  open var company: Company? = null,
   @OneToOne
-  @JsonIgnore
-  var creator: ResifyUser? = null,
+  @JsonbTransient
+  open var creator: ResifyUser? = null,
   @NotNull
   @Column(unique = true)
-  var route: String = "",
+  open var route: String = "",
   @NotNull
-  var calendarName: String = "",
+  open var calendarName: String = "",
   @OneToMany
   @Cascade(CascadeType.ALL)
-  var services: MutableCollection<Service>? = mutableListOf(),
+  open var services: MutableCollection<Service>? = mutableListOf(),
   @CreationTimestamp
-  var createdAt: Date? = null,
-  var published: Boolean? = false,
-  var numberOfEntries: AtomicInteger? = AtomicInteger(0),
+  open var createdAt: Date? = null,
+  open var published: Boolean? = false,
+  open var numberOfEntries: AtomicInteger? = AtomicInteger(0),
   @OneToMany
   @Cascade(CascadeType.ALL)
-  var workSlotConfiguration: MutableCollection<ConfigurationWorkSlot>? =
+  open var workSlotConfiguration: MutableCollection<ConfigurationWorkSlot>? =
     mutableListOf(),
-  @OneToMany
-  var readAuthorized: MutableCollection<ResifyUser> = mutableListOf(),
-  @OneToMany
-  var writeAuthorized: MutableCollection<ResifyUser> = mutableListOf(),
-  var visibility: Visibility = Visibility.Private
-)
+  open var visibility: Visibility = Visibility.Private
+): ResifyObject()
 
 @Entity
-data class ResifyUser
+open class ResifyUser
   (
-  @Id @GeneratedValue
-  var userId: UUID? = null,
   @Column(unique = true)
-  var email: String = "",
-  var role: Role = Role.User,
+  open var email: String = "",
+  open var role: Role = Role.User,
   @ManyToOne
-  var company: Company? = null
-)
+  open var company: Company? = null,
+  @OneToMany(fetch = FetchType.LAZY)
+  open var permissions: MutableCollection<Permission> = mutableListOf()
+): ResifyObject()

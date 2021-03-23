@@ -19,7 +19,7 @@ import org.jboss.logging.Logger
 
 @Provider
 @PreMatching
-class SecurityInterceptor() : ContainerRequestFilter{
+class AuthenticationInterceptor : ContainerRequestFilter{
 
   @Inject
   @field: Default
@@ -34,7 +34,6 @@ class SecurityInterceptor() : ContainerRequestFilter{
   lateinit var logger: Logger
 
   lateinit var currentUser: ResifyUser
-  lateinit var company: Company
 
   override fun filter(requestContext: ContainerRequestContext) {
     val requestUri = requestContext.uriInfo.path;
@@ -44,7 +43,6 @@ class SecurityInterceptor() : ContainerRequestFilter{
       return
     jwt.name ?: throw NotAuthorizedException("authentication failed")
     currentUser = userRepository.findByEmail(jwt.name)?:
-        userRepository.save(ResifyUser(null, jwt.name, role = Role.User))
-    company = currentUser.company ?: throw NoCompanyException(currentUser.userId.toString())
+        userRepository.save(ResifyUser(jwt.name, role = Role.User))
   }
 }

@@ -1,34 +1,32 @@
 package de.freshspark.resify.controllers.api
 
-import de.freshspark.resify.CalendarRouteDuplicate
-import de.freshspark.resify.DataIntegrityViolationException
-import de.freshspark.resify.NoAuthorizationException
+import de.freshspark.resify.*
 import de.freshspark.resify.models.DateRange
-import de.freshspark.resify.SecurityInterceptor
 import de.freshspark.resify.logic.generateWorkSlots
 import de.freshspark.resify.models.ConfigurationWorkSlot
 import de.freshspark.resify.models.ReservationsCalendar
 import de.freshspark.resify.repositories.CalendarRepository
 import de.freshspark.resify.repositories.WorkSlotRepository
 import org.springframework.web.bind.annotation.*
+import java.util.*
 import kotlin.NoSuchElementException
-import org.jboss.logging.Logger
 import javax.ws.rs.core.Response
 
 @RestController
 @RequestMapping("/api/calendars")
 class CalendarController(
     private val calendarRepository: CalendarRepository,
-    private val securityInterceptor: SecurityInterceptor,
-    private val workSlotRepository: WorkSlotRepository
+    private val authenticationInterceptor: AuthenticationInterceptor,
+    private val workSlotRepository: WorkSlotRepository,
 ) {
     @PostMapping("")
+    @CompanyRequired
     fun createCalendar(
         @RequestBody calendar: ReservationsCalendar,
     ): Response {
-        val currentUser = securityInterceptor.currentUser;
+        val currentUser = authenticationInterceptor.currentUser;
         val company = currentUser.company!!
-        if(!company.admins.contains(currentUser)) {
+        if(!company.admins.contains(currentUser) && !(company.owner == currentUser)) {
           throw NoAuthorizationException("user not Authorized to create calendar")
         };
         calendar.creator = currentUser;
@@ -43,21 +41,21 @@ class CalendarController(
     }
 
     @GetMapping("/{route}")
-    fun getCalendar(@PathVariable route: String) {
-      val company = securityInterceptor.currentUser.company!!
-      calendarRepository.findByRouteAndCompany(route, company)
+    fun getCalendar(@PathVariable route: String): ReservationsCalendar? {
+      val company = authenticationInterceptor.currentUser.company!!
+      return calendarRepository.findByRouteAndCompany(route, company)
     }
 
     @GetMapping("")
     fun getCalendarsIntern() =
-        calendarRepository.findAllByCompany(securityInterceptor.company)
+        calendarRepository.findAllByCompany(authenticationInterceptor.currentUser.company!!)
 
     @PostMapping("/{route}/config-work-slots")
     fun createConfigWorkSlot(
         @PathVariable route: String,
         @RequestBody configurationWorkSlot: ConfigurationWorkSlot
     ): Response {
-        val company = securityInterceptor.currentUser.company!!
+        val company = authenticationInterceptor.currentUser.company!!
         val calendar = calendarRepository.findByRouteAndCompany(route, company)
             ?: throw NoSuchElementException("calendar not found")
 
@@ -84,7 +82,7 @@ class CalendarController(
                         @PathVariable route: String)
     : Response
     {
-        val company = securityInterceptor.currentUser.company!!
+        val company = authenticationInterceptor.currentUser.company!!
         val calendar = calendarRepository.findByRouteAndCompany(route, company)?:
                 throw NoSuchElementException("calendar not found")
         for (generatedWorkSlot in generateWorkSlots(

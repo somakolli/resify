@@ -1,11 +1,11 @@
 package de.freshspark.resify.controllers.api
 
 import de.freshspark.resify.DataIntegrityViolationException
-import de.freshspark.resify.SecurityInterceptor
+import de.freshspark.resify.AuthenticationInterceptor
+import de.freshspark.resify.CompanyRequired
 import de.freshspark.resify.models.WorkSlot
 import de.freshspark.resify.repositories.CalendarRepository
 import de.freshspark.resify.repositories.WorkSlotRepository
-import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 import kotlin.NoSuchElementException
@@ -16,15 +16,16 @@ import kotlin.NoSuchElementException
 class WorkSlotController(
     private val calendarRepository: CalendarRepository,
     private val workSlotRepository: WorkSlotRepository,
-    val securityInterceptor: SecurityInterceptor
+    private val authenticationInterceptor: AuthenticationInterceptor
 ) {
     @PostMapping()
+    @CompanyRequired
     fun createWorkSlot(
         @RequestBody workSlot: WorkSlot
         ,
         @PathVariable calendarRoute: String
     ): WorkSlot {
-        val company = securityInterceptor.company
+        val company = authenticationInterceptor.currentUser.company!!
         val calendar = calendarRepository.findByRouteAndCompany(calendarRoute, company)
             ?: throw NoSuchElementException("calendar not found");
         val workSlots = workSlotRepository.findByCalendarAndDay(
@@ -41,12 +42,13 @@ class WorkSlotController(
     }
 
     @GetMapping("/{day}")
+    @CompanyRequired
     fun getWorkSlots(
         @PathVariable calendarRoute: String,
         @PathVariable day: String
     ): List<WorkSlot> {
         val dayDate = LocalDate.parse(day)
-        val company = securityInterceptor.company
+        val company = authenticationInterceptor.currentUser.company!!
         val calendar = calendarRepository.findByRouteAndCompany(calendarRoute, company)?:
             throw NoSuchElementException("calendar not found")
         return workSlotRepository.findByCalendarAndDay(calendar, dayDate)
