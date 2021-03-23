@@ -6,30 +6,40 @@ import java.time.LocalDate
 import java.util.*
 
 interface UserRepository : JpaRepository<ResifyUser, UUID> {
-    fun findTopByEmailContains(subString: String): List<ResifyUser>
-    fun findByEmail(email: String): ResifyUser?
+  fun findByEmailAndCompany(email: String, company: Company): ResifyUser?
+  fun findAllByCompany(company: Company): List<ResifyUser>?
+  fun findByEmail(email: String): ResifyUser?
 }
 
 interface CalendarRepository : JpaRepository<ReservationsCalendar, UUID> {
-    fun findByRouteAndCompany(route: String, company: Company): ReservationsCalendar?
-    fun findByRouteAndCompanyName(route: String, companyName: String): ReservationsCalendar?
-    fun findAllByCompany(company: Company): List<ReservationsCalendar>?
-    fun findAllByCompanyName(companyName: String): List<ReservationsCalendar>?
+  fun findByRouteAndCompany(
+    route: String,
+    company: Company
+  ): ReservationsCalendar?
+
+  fun findByRouteAndCompanyName(
+    route: String,
+    companyName: String
+  ): ReservationsCalendar?
+
+  fun findAllByCompany(company: Company): List<ReservationsCalendar>?
+  fun findAllByCompanyName(companyName: String): List<ReservationsCalendar>?
 }
 
 interface WorkSlotRepository : JpaRepository<WorkSlot, UUID> {
-    fun findByCalendarAndDay(
-        calendar: ReservationsCalendar,
-        day: LocalDate
-    ): List<WorkSlot>
+  fun findByCalendarAndDay(
+    calendar: ReservationsCalendar,
+    day: LocalDate
+  ): List<WorkSlot>
 }
 
 interface ConfigurationWorkSlotsRepository :
-    JpaRepository<ConfigurationWorkSlot, UUID> {
+  JpaRepository<ConfigurationWorkSlot, UUID> {
 }
 
 interface ReservationRepository : JpaRepository<Reservation, UUID> {
 }
 
-interface CompanyRepository: JpaRepository<Company, UUID> {
+interface CompanyRepository : JpaRepository<Company, UUID> {
+  fun findAllByNameContains(searchString: String): List<Company>?
 }

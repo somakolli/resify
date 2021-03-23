@@ -1,6 +1,7 @@
 package de.freshspark.resify.controllers.api.public
 
 import de.freshspark.resify.repositories.CalendarRepository
+import de.freshspark.resify.repositories.CompanyRepository
 import de.freshspark.resify.repositories.UserRepository
 import org.springframework.web.bind.annotation.*
 
@@ -25,9 +26,9 @@ class CalendarController(val calendarRepository: CalendarRepository) {
 }
 
 @RestController
-@RequestMapping("/public/users")
-class UserController(val userRepository: UserRepository) {
-    @GetMapping("")
-    fun getUsers(@RequestParam("q") subString: String) =
-        userRepository.findTopByEmailContains(subString)
+@RequestMapping("/public")
+class PublicController(val companyRepository: CompanyRepository) {
+  @GetMapping("/companies")
+  fun searchCompanies(@RequestParam("q") searchString: String) =
+    companyRepository.findAllByNameContains(searchString)
 }

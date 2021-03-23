@@ -6,7 +6,6 @@ import io.quarkus.runtime.annotations.RegisterForReflection
 import org.hibernate.annotations.Cascade
 import org.hibernate.annotations.CascadeType
 import org.hibernate.annotations.CreationTimestamp
-import org.hibernate.annotations.LazyCollection
 import java.time.*
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
@@ -32,12 +31,31 @@ enum class PermissionType(val binNum: Int) {
   Write(0b10)
 }
 
+fun ReadPermission(resource: UUID?) = Permission(
+  resource
+)
+fun WritePermission(resource: UUID?) = Permission(
+  resource, PermissionScope.All, PermissionType.Write
+)
 @Entity
 open class Permission (
   open var resource: UUID? = null,
-  open var permissionScope: PermissionScope = PermissionScope.All,
-  open var permissionType: PermissionType = PermissionType.Read
-    ) : ResifyObject()
+  open var scope: PermissionScope = PermissionScope.All,
+  open var type: PermissionType = PermissionType.Read
+    ) : ResifyObject() {
+  override fun equals(other: Any?): Boolean =
+    (other is Permission)
+        && other.resource == resource
+        && other.scope == scope
+        && other.type == type
+
+  override fun hashCode(): Int {
+    var result = resource?.hashCode() ?: 0
+    result = 31 * result + scope.hashCode()
+    result = 31 * result + type.hashCode()
+    return result
+  }
+}
 
 @Embeddable
 class PersonalInformation(

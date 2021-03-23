@@ -4,6 +4,7 @@ import de.freshspark.resify.models.*
 import de.freshspark.resify.DataIntegrityViolationException
 import de.freshspark.resify.AuthenticationInterceptor
 import de.freshspark.resify.CompanyRequired
+import de.freshspark.resify.NoAuthorizationException
 import de.freshspark.resify.logic.checkIfTimeRangeInWorkSlot
 import de.freshspark.resify.repositories.CalendarRepository
 import de.freshspark.resify.repositories.ReservationRepository
@@ -20,6 +21,31 @@ class ReservationsController(
     val workSlotRepository: WorkSlotRepository,
     val authenticationInterceptor: AuthenticationInterceptor
 ) {
+    val currentUser = authenticationInterceptor.currentUser
+    val company = authenticationInterceptor.currentUser.company!!
+
+    val isAdminOrOwner =
+        company.admins.contains(currentUser) || company.owner == currentUser
+
+    fun hasResourceReadAuthorization(calendar: ReservationsCalendar) =
+        currentUser.permissions.contains(Permission(calendar.id))
+
+
+    fun hasResourceWriteAuthorization(calendar: ReservationsCalendar) =
+      currentUser.permissions.contains(Permission(calendar.id,
+            PermissionScope.All, PermissionType.Write))
+
+
+    fun canCreateReservation(calendar: ReservationsCalendar) {
+      if(!isAdminOrOwner || !hasResourceWriteAuthorization(calendar))
+        throw NoAuthorizationException("not authorized to create reservation")
+    }
+
+    fun canGetReservations(calendar: ReservationsCalendar) {
+        if(!isAdminOrOwner || !hasResourceReadAuthorization(calendar))
+            throw NoAuthorizationException("not authorized to read calendar")
+    }
+
     @GetMapping()
     @CompanyRequired
     fun getReservations(
@@ -29,6 +55,7 @@ class ReservationsController(
         val company = authenticationInterceptor.currentUser.company!!
         val calendar = calendarRepository.findByRouteAndCompany(calendarRoute, company )
             ?: throw NoSuchElementException("calendar route")
+        canGetReservations(calendar)
         val workSlots = workSlotRepository.findByCalendarAndDay(calendar, LocalDate.parse(day))
         return workSlots.flatMap { it.reservations }
     }
@@ -42,6 +69,8 @@ class ReservationsController(
         val company = authenticationInterceptor.currentUser.company!!
         val calendar = calendarRepository.findByRouteAndCompany(calendarRoute, company)
             ?: throw NoSuchElementException("calendar");
+
+        canCreateReservation(calendar)
         val workSlots =
             workSlotRepository.findByCalendarAndDay(calendar, reservation.day!!)
         val validWorkSlots =
