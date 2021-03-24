@@ -10,6 +10,9 @@
       <ReservationSelector
         v-else-if="reservationState === ReservationState.Date"
         class="w-full mt-5"
+        :calendar="calendar"
+        :url="url"
+        :companyName="companyName"
       ></ReservationSelector>
       <PersonalInformationEntry
         v-else-if="reservationState === ReservationState.PersonalInformation"
@@ -35,13 +38,15 @@
 </template>
 
 <script lang="ts">
-import { computed, ref } from "@vue/composition-api";
+import {computed, ref, watchEffect} from "@vue/composition-api";
 import ListItem from "@/components/ListItem.vue";
 import Button from "@/components/shared-components/Button.vue";
 import ReservationSelector from "@/components/ReservationSelector.vue";
 import PersonalInformationEntry from "@/components/PersonalInformationEntry.vue";
 import Summary from "@/components/Summary.vue";
+import {TimeRange} from "~/shared-modules/DateTime/TimeRange";
 export const selectedServices = ref(new Array(0));
+export const url = "http://localhost:8080/"
 export const totalDuration = computed(() => {
   let returnDuration = 0;
   for (const service of selectedServices.value) {
@@ -49,6 +54,7 @@ export const totalDuration = computed(() => {
   }
   return returnDuration;
 });
+export const selectedTimeRange = ref<TimeRange>();
 enum ReservationState {
   Service = 0,
   Date = 1,
@@ -73,6 +79,8 @@ export default {
       reservationState,
       ReservationState,
       numberOfSteps,
+      url,
+      selectedTimeRange
     };
   },
   // this gets executed on the server
@@ -83,6 +91,7 @@ export default {
     );
     return {
       calendar,
+      companyName: params.company
     };
   },
 };

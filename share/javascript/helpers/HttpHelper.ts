@@ -1,8 +1,8 @@
 import { AuthProvider } from "./auth/AuthProvider";
 
 export class HttpHelper {
-  authProvider: AuthProvider;
-  constructor(authProvider: AuthProvider) {
+  authProvider: AuthProvider | null;
+  constructor(authProvider: AuthProvider | null) {
     this.authProvider = authProvider;
   }
 
@@ -34,6 +34,8 @@ export class HttpHelper {
     url: string,
     data: DataType
   ): Promise<ReturnType> {
+    if(!this.authProvider)
+      throw "please provide auth provider"
     const idToken = await this.authProvider.getIdToken();
     return this.postData<ReturnType, DataType>(url, data, {
       Authorization: "Bearer " + idToken,
@@ -48,6 +50,8 @@ export class HttpHelper {
   }
 
   async getDataAuthenticated<T>(url: string): Promise<T> {
+    if(!this.authProvider)
+      throw "please provide auth provider"
     const idToken = await this.authProvider.getIdToken();
     return this.getData<T>(url, { Authorization: "Bearer " + idToken });
   }
