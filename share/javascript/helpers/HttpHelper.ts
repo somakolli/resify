@@ -24,6 +24,9 @@ export class HttpHelper {
       referrerPolicy: "no-referrer",
       body: JSON.stringify(data),
     });
+    if(!response.ok) {
+      throw await response.json();
+    }
     return response.json();
   }
 
@@ -39,6 +42,8 @@ export class HttpHelper {
 
   async getData<T>(url: string, headers = {}): Promise<T> {
     const response = await fetch(url, { headers: headers });
+    if(!response.ok)
+      throw await response.json();
     return response.json();
   }
 

@@ -11,6 +11,7 @@ import de.freshspark.resify.repositories.ReservationRepository
 import de.freshspark.resify.repositories.WorkSlotRepository
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
+import javax.ws.rs.core.Response
 import kotlin.NoSuchElementException
 
 @RestController
@@ -28,21 +29,21 @@ class ReservationsController(
         company.admins.contains(currentUser) || company.owner == currentUser
 
     fun hasResourceReadAuthorization(calendar: ReservationsCalendar) =
-        currentUser.permissions.contains(Permission(calendar.id))
+        authenticationInterceptor.permissions.contains(Permission(calendar.id))
 
 
     fun hasResourceWriteAuthorization(calendar: ReservationsCalendar) =
-      currentUser.permissions.contains(Permission(calendar.id,
+      authenticationInterceptor.permissions.contains(Permission(calendar.id,
             PermissionScope.All, PermissionType.Write))
 
 
     fun canCreateReservation(calendar: ReservationsCalendar) {
-      if(!isAdminOrOwner || !hasResourceWriteAuthorization(calendar))
+      if(!isAdminOrOwner && !hasResourceWriteAuthorization(calendar))
         throw NoAuthorizationException("not authorized to create reservation")
     }
 
     fun canGetReservations(calendar: ReservationsCalendar) {
-        if(!isAdminOrOwner || !hasResourceReadAuthorization(calendar))
+        if(!isAdminOrOwner && !hasResourceReadAuthorization(calendar))
             throw NoAuthorizationException("not authorized to read calendar")
     }
 
@@ -65,7 +66,7 @@ class ReservationsController(
     fun createReservation(
         @RequestBody reservation: Reservation,
         @PathVariable calendarRoute: String
-    ): Reservation {
+    ): Response {
         val company = authenticationInterceptor.currentUser.company!!
         val calendar = calendarRepository.findByRouteAndCompany(calendarRoute, company)
             ?: throw NoSuchElementException("calendar");
@@ -84,9 +85,9 @@ class ReservationsController(
             throw DataIntegrityViolationException("no work slot for reservation")
         if (validWorkSlots.size > 1)
             throw DataIntegrityViolationException("multiple work slots for reservation")
-        reservationsRepository.save(reservation)
+        val reservation = reservationsRepository.save(reservation)
         validWorkSlots[0].reservations.add(reservation)
         workSlotRepository.save(validWorkSlots[0])
-        return reservation
+        return Response.status(201).entity(reservation).build()
     }
 }

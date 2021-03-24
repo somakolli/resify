@@ -31,7 +31,7 @@ const routes: Array<RouteRecordRaw> = [
                 component: () =>
                   import(
                     /* webpackChunkName: "calendar-workslots" */ '../views/calendars/configuration/WorkSlots.vue'
-                  ),
+                  )
               },
               {
                 path: 'services',
@@ -40,7 +40,7 @@ const routes: Array<RouteRecordRaw> = [
                 component: () =>
                   import(
                     /* webpackChunkName: "calendar-services" */ '../views/calendars/configuration/Services.vue'
-                  ),
+                  )
               },
               {
                 path: 'reservation',
@@ -49,11 +49,11 @@ const routes: Array<RouteRecordRaw> = [
                 component: () =>
                   import(
                     /* webpackChunkName: "calendar-reservation" */ '../views/calendars/configuration/Reservation.vue'
-                  ),
-              },
-            ],
-          },
-        ],
+                  )
+              }
+            ]
+          }
+        ]
       },
       {
         path: '/stats',
@@ -62,25 +62,33 @@ const routes: Array<RouteRecordRaw> = [
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
         component: () =>
-          import(/* webpackChunkName: "stats" */ '../views/Stats.vue'),
-      },
-    ],
+          import(/* webpackChunkName: "stats" */ '../views/Stats.vue')
+      }
+    ]
   },
   {
     path: '/login',
     name: 'Login',
-    component: () => import('../views/auth/Login.vue'),
+    component: () => import('../views/auth/Login.vue')
   },
   {
     path: '/logout',
     name: 'Logout',
-    component: () => import('../views/auth/Logout.vue'),
+    component: () => import('../views/auth/Logout.vue')
   },
+  {
+    path: '/create-company',
+    name: 'CreateCompany',
+    meta: {
+      requiresAuth: true
+    },
+    component: () => import('../views/company/CreateCompany.vue')
+  }
 ];
 
 const router = createRouter({
   history: createWebHistory(),
-  routes,
+  routes
 });
 
 export default router;

@@ -51,14 +51,27 @@ import { useRoute, useRouter } from 'vue-router';
 
 import Icon from '@components/Icon.vue';
 import { authProvider } from '@/config/auth-config';
+import { UserService } from '@share/services/UserService';
+import { url } from '@/config/url-config';
+import { ref } from 'vue';
+import { User } from '@share/models/User';
+export const user = ref<User>(null);
 export default {
   components: { Icon },
   setup() {
     const route = useRoute();
     const router = useRouter();
+    const userService = new UserService(url, authProvider);
     if (route.meta.requiresAuth) {
       if (!authProvider.isSignedIn) {
         router.push({ name: 'Login' });
+      } else {
+        userService.getMe().then(returnUser => {
+          user.value = returnUser;
+          if (!user.value.company) {
+            router.push({ name: 'CreateCompany' });
+          }
+        });
       }
     }
   },
@@ -67,19 +80,19 @@ export default {
       sideBarIcons: [
         {
           iconName: 'calendar',
-          route: 'calendars',
+          route: 'calendars'
         },
         {
           iconName: 'stats',
-          route: 'stats',
+          route: 'stats'
         },
         {
           iconName: 'logout',
-          route: 'logout',
-        },
+          route: 'logout'
+        }
       ],
       navVisibility: 'flex',
-      windowLargeEnough: true,
+      windowLargeEnough: true
     };
   },
   watch: {
@@ -89,7 +102,7 @@ export default {
       } else {
         this.navVisibility = 'flex';
       }
-    },
-  },
+    }
+  }
 };
 </script>

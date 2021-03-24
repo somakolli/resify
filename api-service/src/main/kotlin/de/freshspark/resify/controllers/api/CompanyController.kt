@@ -31,6 +31,8 @@ class CompanyController(
 
   @POST
   fun createCompany(@RequestBody company: Company): Company {
+    if(company.name == null || company.name == "")
+      throw DataIntegrityViolationException("no-company-name")
     canCreateCompany()
     company.owner = currentUser
     currentUser.company = company

@@ -18,36 +18,36 @@ class CalendarController(
   private val authenticationInterceptor: AuthenticationInterceptor,
   private val workSlotRepository: WorkSlotRepository
 ) {
-  val company = authenticationInterceptor.currentUser.company!!
+  val company = authenticationInterceptor.currentUser.company
   val currentUser = authenticationInterceptor.currentUser
 
-  val isAdminOrOwner =
-    (!company.admins.contains(currentUser) && !(company.owner == currentUser))
+  fun isAdminOrOwner() =
+    (company!!.owner == currentUser) || (company.admins.contains(currentUser))
 
   fun hasResourceReadAuthorization(id: UUID) =
     hasPermission(
-      currentUser,
+      authenticationInterceptor.permissions,
       Permission(id, PermissionScope.All, PermissionType.Read)
     )
 
   fun hasResourceWriteAuthorization(id: UUID) =
     hasPermission(
-      currentUser,
+      authenticationInterceptor.permissions,
       Permission(id, PermissionScope.All, PermissionType.Write)
     )
 
   private fun canReadCalendar(calendarId: UUID) {
-    if (!(isAdminOrOwner && hasResourceReadAuthorization(calendarId)))
+    if (!(isAdminOrOwner() || hasResourceReadAuthorization(calendarId)))
       throw NoAuthorizationException(calendarId.toString())
   }
 
   private fun canCreateCalendar() {
-    if (!isAdminOrOwner)
+    if (!isAdminOrOwner())
       throw NoAuthorizationException("cannot create a new calendar")
   }
 
   private fun canWriteCalendar(calendar: ReservationsCalendar) {
-    if (!isAdminOrOwner || !hasResourceWriteAuthorization(calendar.id!!))
+    if (!isAdminOrOwner() && !hasResourceWriteAuthorization(calendar.id!!))
       throw NoAuthorizationException("cannot write calendar" + calendar.route)
   }
 
@@ -68,19 +68,22 @@ class CalendarController(
   }
 
   @GetMapping("/{route}")
+  @CompanyRequired
   fun getCalendar(@PathVariable route: String): ReservationsCalendar {
 
-    val calendar = calendarRepository.findByRouteAndCompany(route, company)
+    val calendar = calendarRepository.findByRouteAndCompany(route, company!!)
       ?: throw NoSuchElementException(route)
     canReadCalendar(calendar.id!!)
     return calendar
   }
 
   @GetMapping("")
+  @CompanyRequired
   fun getCalendarsIntern() =
     calendarRepository.findAllByCompany(authenticationInterceptor.currentUser.company!!)
 
   @PostMapping("/{route}/config-work-slots")
+  @CompanyRequired
   fun createConfigWorkSlot(
     @PathVariable route: String,
     @RequestBody configurationWorkSlot: ConfigurationWorkSlot
@@ -110,6 +113,7 @@ class CalendarController(
   }
 
   @PostMapping("/{route}/work-slots/generate")
+  @CompanyRequired
   fun createWorkSlots(
     @RequestBody dateRange: DateRange,
     @PathVariable route: String

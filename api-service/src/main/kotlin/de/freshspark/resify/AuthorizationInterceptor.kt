@@ -19,6 +19,8 @@ class AuthorizationInterceptor: ContainerRequestFilter {
   lateinit var authenticationInterceptor: AuthenticationInterceptor
 
   override fun filter(p0: ContainerRequestContext?) {
+    if(p0!!.request.method == "OPTIONS")
+      return
     if(authenticationInterceptor.currentUser.company == null)
       throw NoCompanyException(authenticationInterceptor.currentUser.id.toString())
   }

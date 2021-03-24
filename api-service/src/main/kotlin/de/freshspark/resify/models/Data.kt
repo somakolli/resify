@@ -182,6 +182,8 @@ open class ResifyUser
   open var role: Role = Role.User,
   @ManyToOne
   open var company: Company? = null,
-  @OneToMany(fetch = FetchType.LAZY)
+  @OneToMany
+  @JsonbTransient
+  @JsonIgnore
   open var permissions: MutableCollection<Permission> = mutableListOf()
 ): ResifyObject()

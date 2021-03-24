@@ -1,6 +1,7 @@
 package de.freshspark.resify
 
 import de.freshspark.resify.models.Company
+import de.freshspark.resify.models.Permission
 import de.freshspark.resify.models.ResifyUser
 import de.freshspark.resify.models.Role
 import de.freshspark.resify.repositories.UserRepository
@@ -34,6 +35,7 @@ class AuthenticationInterceptor : ContainerRequestFilter{
   lateinit var logger: Logger
 
   lateinit var currentUser: ResifyUser
+  lateinit var permissions: MutableCollection<Permission>
 
   override fun filter(requestContext: ContainerRequestContext) {
     val requestUri = requestContext.uriInfo.path;
@@ -44,5 +46,6 @@ class AuthenticationInterceptor : ContainerRequestFilter{
     jwt.name ?: throw NotAuthorizedException("authentication failed")
     currentUser = userRepository.findByEmail(jwt.name)?:
         userRepository.save(ResifyUser(jwt.name, role = Role.User))
+    permissions = currentUser.permissions
   }
 }

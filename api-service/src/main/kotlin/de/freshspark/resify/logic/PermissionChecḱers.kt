@@ -7,10 +7,10 @@ import de.freshspark.resify.models.ResifyUser
 import java.util.*
 
 fun hasPermission(
-  user: ResifyUser,
+  userPermissions: MutableCollection<Permission>,
   permission: Permission
 ): Boolean {
-  return user.permissions.any {
+  return userPermissions.any {
     it == permission
   }
 }

@@ -26,6 +26,10 @@ interface CalendarRepository : JpaRepository<ReservationsCalendar, UUID> {
   fun findAllByCompanyName(companyName: String): List<ReservationsCalendar>?
 }
 
+interface ServiceRepository : JpaRepository<Service, UUID> {
+
+}
+
 interface WorkSlotRepository : JpaRepository<WorkSlot, UUID> {
   fun findByCalendarAndDay(
     calendar: ReservationsCalendar,

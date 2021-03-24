@@ -5,14 +5,17 @@ import de.freshspark.resify.CompanyRequired
 import de.freshspark.resify.NoAuthorizationException
 import de.freshspark.resify.models.*
 import de.freshspark.resify.repositories.CalendarRepository
+import de.freshspark.resify.repositories.ServiceRepository
 import org.springframework.web.bind.annotation.*
+import javax.ws.rs.core.Response
 import kotlin.NoSuchElementException
 
 @RestController
 @RequestMapping("/api/calendars/{calendarRoute}/services")
 class ServiceController(
   val calendarRepository: CalendarRepository,
-  val authenticationInterceptor: AuthenticationInterceptor
+  val authenticationInterceptor: AuthenticationInterceptor,
+  val serviceRepository: ServiceRepository
 ) {
   val currentUser = authenticationInterceptor.currentUser
   val company = authenticationInterceptor.currentUser.company!!
@@ -26,7 +29,7 @@ class ServiceController(
     currentUser.permissions.contains(WritePermission(calendar.id))
 
   fun canCreateService(calendar: ReservationsCalendar) {
-    if(!isAdminOrOwner || !hasResourceWritePermission(calendar))
+    if(!isAdminOrOwner && !hasResourceWritePermission(calendar))
       throw NoAuthorizationException("not authorized to create service for this calendar")
   }
 
@@ -35,14 +38,15 @@ class ServiceController(
   fun postService(
     @PathVariable calendarRoute: String,
     @RequestBody service: Service
-  ): Service {
+  ): Response {
     val company = authenticationInterceptor.currentUser.company!!
     val calendar =
       calendarRepository.findByRouteAndCompany(calendarRoute, company)
         ?: throw NoSuchElementException("calendar not found");
     canCreateService(calendar)
+    val service = serviceRepository.save(service)
     calendar.services?.add(service)
     calendarRepository.save(calendar)
-    return service
+    return Response.status(201).entity(service).build()
   }
 }
