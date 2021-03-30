@@ -37,6 +37,7 @@ fun ReadPermission(resource: UUID?) = Permission(
 fun WritePermission(resource: UUID?) = Permission(
   resource, PermissionScope.All, PermissionType.Write
 )
+
 @Entity
 open class Permission (
   open var resource: UUID? = null,
@@ -57,12 +58,6 @@ open class Permission (
   }
 }
 
-@Embeddable
-class PersonalInformation(
-  var name: String = "",
-  var email: String = "",
-  var phoneNumber: String = ""
-)
 
 @Embeddable
 class TimeRange(
@@ -87,12 +82,12 @@ open class Reservation
   (
   open var day: LocalDate? = null,
   open var timeRange: TimeRange? = null,
-  open var personalInformation: PersonalInformation? = null,
+  open var personalInformation: String? = "",
   @ManyToOne
   @JsonbTransient
   open var workSlot: WorkSlot? = null,
-  @ManyToOne
-  open var service: Service? = null
+  @ManyToMany
+  open var services: MutableCollection<Service>? = mutableListOf()
 ): ResifyObject()
 
 @Entity
@@ -171,7 +166,9 @@ open class ReservationsCalendar
   @Cascade(CascadeType.ALL)
   open var workSlotConfiguration: MutableCollection<ConfigurationWorkSlot>? =
     mutableListOf(),
-  open var visibility: Visibility = Visibility.Private
+  open var visibility: Visibility = Visibility.Private,
+  @Column(columnDefinition = "text")
+  open var personalInformationSchema: String = defaultPersonalInformation
 ): ResifyObject()
 
 @Entity

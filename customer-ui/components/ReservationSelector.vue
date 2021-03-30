@@ -24,7 +24,9 @@ import {MyDate} from "~/shared-modules/DateTime/MyDate";
 import {ref, watchEffect} from "@vue/composition-api";
 import {TimeRange} from "~/shared-modules/DateTime/TimeRange";
 import Icon from "@/components/shared-components/Icon.vue";
-import { selectedTimeRange } from '@/pages/_company/_calendar/index.vue'
+import {reservation} from '@/pages/_company/_calendar/index.vue'
+import {nextClick, setValidAnyMoveOn} from "~/pages/_company/_calendar/index.vue";
+
 export default {
   components: {DaySelect, Icon},
   props: {
@@ -38,10 +40,16 @@ export default {
     companyName: {
       type: String,
       required: true
+    },
+    startClick: {
+      type: Number,
+      required: true
     }
   },
-  emits: ['selectedTimeRange'],
-  setup(props: any) {
+  emits: ['selectedTimeRange', 'valid'],
+  setup(props: any, {emit}: any) {
+
+
     const selectedDate = ref(MyDate.today());
     const selectedIndex = ref<number>(-1)
 
@@ -53,9 +61,9 @@ export default {
     }
 
     watchEffect(() => {
-        selectedTimeRange.value = recommendations.value[selectedIndex.value]
-      }
-    )
+      reservation.value.timeRange = recommendations.value[selectedIndex.value];
+      reservation.value.day = selectedDate.value;
+    });
 
     async function updateRecommendations() {
       const recommendationsRequest =
@@ -71,6 +79,11 @@ export default {
       return `${timeRange.startTime?.getLocaleString('de')} - ${timeRange.endTime?.getLocaleString('de')}`
     }
 
+    function validate() {
+      return selectedIndex.value > -1
+    }
+
+    setValidAnyMoveOn(props, emit, nextClick, validate)
     return {
       selectedDate,
       today: MyDate.fromString("2021-03-01"),

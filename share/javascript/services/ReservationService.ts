@@ -2,7 +2,7 @@ import { MyDate } from "../DateTime/MyDate";
 import { TimeRange } from "../DateTime/TimeRange";
 import { AuthProvider } from "../helpers/auth/AuthProvider";
 import { HttpHelper } from "../helpers/HttpHelper";
-import { PersonalInformation, Reservation } from "../models/Reservation";
+import { Reservation } from "../models/Reservation";
 
 export class ReservationService {
   url: string;
@@ -18,6 +18,7 @@ export class ReservationService {
   async createReservation(reservation: Reservation) {
     return await this.httpHelper.postDataAuthenticated(this.url, reservation);
   }
+  // @ts-ignore
   async retrieveReservations(date: MyDate): Promise<Reservation[]> {
     // in js january is 0 because it is a copy of java 1.0
     const newDate = new MyDate(date.year, date.month + 1, date.day);
@@ -29,7 +30,7 @@ export class ReservationService {
         new Reservation(
           reservation.reservationId,
           TimeRange.fromServerResponse(reservation.timeRange),
-          new PersonalInformation("test")
+          JSON.parse(reservation.personalInformation)
         )
     );
   }

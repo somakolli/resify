@@ -9,6 +9,7 @@
     >
       <span class="mr-1 font-semibold">{{ duration }}m</span>
       <div
+        v-if="iconName"
         class="shadow rounded-full h-full w-10 -mr-2 flex items-center justify-center"
       >
         <Icon class="w-8 h-8 text-green-700" :icon-name="iconName"></Icon>

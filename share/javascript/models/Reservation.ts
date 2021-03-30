@@ -1,23 +1,18 @@
 import { TimeRange } from "../DateTime/TimeRange";
+import {Service} from "./Service";
+import {MyDate} from "../DateTime/MyDate";
 
-export class PersonalInformation {
-  public _name: string;
-  constructor(name: string) {
-    this._name = name;
-  }
-  get name(): string {
-    return this._name;
-  }
-}
 
 export class Reservation {
-  private id: string;
-  private timeRange: TimeRange;
-  private personalInformation: PersonalInformation;
+  id: string;
+  timeRange: TimeRange;
+  personalInformation: any;
+  day: MyDate;
+  services: Service[] = new Array<Service>();
   constructor(
-    id: string,
+    id = '',
     timeRange: TimeRange,
-    personalInformation: PersonalInformation
+    personalInformation: any
   ) {
     this.id = id;
     this.timeRange = timeRange;

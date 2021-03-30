@@ -39,21 +39,34 @@
 import ListItem from "@/components/ListItem.vue";
 import Button from "@/components/shared-components/Button.vue";
 import {
-  selectedServices,
+  reservation,
   totalDuration,
+  nextClick
 } from "@/pages/_company/_calendar/index.vue";
+import {ref, watchEffect} from "@vue/composition-api";
+import {setValidAnyMoveOn} from "~/pages/_company/_calendar/index.vue";
 export default {
   props: {
     calendar: {
       required: true,
     },
-  },
-  components: { ListItem, Button },
-  setup() {
-    function removeService(index: number) {
-      selectedServices.value.splice(index, 1);
+    startClick: {
+      type: Number,
+      required: true
     }
-    return { removeService, totalDuration, selectedServices };
+  },
+  emits: ["valid"],
+  components: { ListItem, Button },
+  setup(props: any, {emit}: any) {
+    function removeService(index: number) {
+      reservation.value.services.splice(index, 1);
+    }
+    function validate() {
+      return reservation.value.services.length > 0;
+    }
+
+    setValidAnyMoveOn(props, emit, nextClick, validate);
+    return { removeService, totalDuration, selectedServices: reservation.value.services };
   },
 };
 </script>

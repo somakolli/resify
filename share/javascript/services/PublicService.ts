@@ -6,5 +6,4 @@ export class PublicService {
   constructor(baseUrl: string) {
     this.url = baseUrl;
   }
-
 }

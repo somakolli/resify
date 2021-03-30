@@ -1,3 +1,5 @@
+import CalendarHelper from "../helpers/CalendarHelper";
+
 export class MyDate {
   year: number;
   month: number;
@@ -44,5 +46,14 @@ export class MyDate {
         return value < 1000 ? MyDate.pad(value, 2) : value;
       })
       .join("-");
+  }
+  formatLong() {
+    return this.day + ' ' + this.monthNameLong() + ' ' +  this.year;
+  }
+  dayNameLong(): string{
+    return CalendarHelper.getDayName(this.toDate(), 'en', 'long')
+  }
+  monthNameLong() {
+    return CalendarHelper.getMonthName(this.toDate(), 'en', 'long');
   }
 }
