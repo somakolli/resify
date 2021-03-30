@@ -14,45 +14,47 @@ import kotlin.NoSuchElementException
 @RestController
 @RequestMapping("/api/calendars/{calendarRoute}/workslots")
 class WorkSlotController(
-    private val calendarRepository: CalendarRepository,
-    private val workSlotRepository: WorkSlotRepository,
-    private val authenticationInterceptor: AuthenticationInterceptor
+  private val calendarRepository: CalendarRepository,
+  private val workSlotRepository: WorkSlotRepository,
+  private val authenticationInterceptor: AuthenticationInterceptor
 ) {
-    @PostMapping()
-    @CompanyRequired
-    fun createWorkSlot(
-        @RequestBody workSlot: WorkSlot
-        ,
-        @PathVariable calendarRoute: String
-    ): WorkSlot {
-        val company = authenticationInterceptor.currentUser.company!!
-        val calendar = calendarRepository.findByRouteAndCompany(calendarRoute, company)
-            ?: throw NoSuchElementException("calendar not found");
-        val workSlots = workSlotRepository.findByCalendarAndDay(
-            calendar,
-            workSlot.day!!
-        )
-        val conflictingSlots = workSlots.filter { existingSlot ->
-            workSlot.timeRange!!.inConflict(existingSlot.timeRange!!)
-        }
-        if (conflictingSlots.isNotEmpty())
-            throw DataIntegrityViolationException("workslot range in conflict with existing workslot")
-        workSlot.calendar = calendar
-        return workSlotRepository.save(workSlot)
+  @PostMapping()
+  @CompanyRequired
+  fun createWorkSlot(
+    @RequestBody workSlot: WorkSlot,
+    @PathVariable calendarRoute: String
+  ): WorkSlot {
+    val company = authenticationInterceptor.currentUser.company!!
+    val calendar =
+      calendarRepository.findByRouteAndCompany(calendarRoute, company)
+        ?: throw NoSuchElementException("calendar not found");
+    val workSlots = workSlotRepository.findByCalendarAndDay(
+      calendar,
+      workSlot.day!!
+    )
+    val conflictingSlots = workSlots.filter { existingSlot ->
+      workSlot.timeRange!!.inConflict(existingSlot.timeRange!!)
     }
+    if (conflictingSlots.isNotEmpty())
+      throw DataIntegrityViolationException("workslot " +
+          "range in conflict with existing workslot")
+    workSlot.calendar = calendar
+    return workSlotRepository.save(workSlot)
+  }
 
-    @GetMapping("/{day}")
-    @CompanyRequired
-    fun getWorkSlots(
-        @PathVariable calendarRoute: String,
-        @PathVariable day: String
-    ): List<WorkSlot> {
-        val dayDate = LocalDate.parse(day)
-        val company = authenticationInterceptor.currentUser.company!!
-        val calendar = calendarRepository.findByRouteAndCompany(calendarRoute, company)?:
-            throw NoSuchElementException("calendar not found")
-        return workSlotRepository.findByCalendarAndDay(calendar, dayDate)
-    }
+  @GetMapping("/{day}")
+  @CompanyRequired
+  fun getWorkSlots(
+    @PathVariable calendarRoute: String,
+    @PathVariable day: String
+  ): List<WorkSlot> {
+    val dayDate = LocalDate.parse(day)
+    val company = authenticationInterceptor.currentUser.company!!
+    val calendar =
+      calendarRepository.findByRouteAndCompany(calendarRoute, company)
+        ?: throw NoSuchElementException("calendar not found")
+    return workSlotRepository.findByCalendarAndDay(calendar, dayDate)
+  }
 
 }
 

@@ -88,7 +88,11 @@ open class Reservation
   open var workSlot: WorkSlot? = null,
   @ManyToMany
   open var services: MutableCollection<Service>? = mutableListOf()
-): ResifyObject()
+): ResifyObject(), Comparable<Reservation> {
+  override fun compareTo(other: Reservation): Int {
+    return timeRange!!.startTime!!.compareTo(other.timeRange!!.startTime!!)
+  }
+}
 
 @Entity
 open class Company(
@@ -126,7 +130,8 @@ open class WorkSlot
   @JsonbTransient
   open var calendar: ReservationsCalendar? = null,
   @OneToMany
-  open var reservations: MutableCollection<Reservation> = mutableListOf()
+  open var reservations: MutableCollection<Reservation> = mutableListOf(),
+  open var largestGap: Int = Int.MAX_VALUE
 ): ResifyObject()
 
 @Entity

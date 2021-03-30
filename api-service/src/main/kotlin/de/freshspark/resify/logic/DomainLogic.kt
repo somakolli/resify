@@ -1,6 +1,7 @@
 package de.freshspark.resify.logic
 
 import de.freshspark.resify.models.*
+import org.wildfly.common.Assert
 import java.util.*
 
 fun checkIfReservationValid(
@@ -85,12 +86,65 @@ fun calRecommendedTimeRanges(
   while (startTime.isBefore(endTime)) {
     val candidateTimeRange =
       TimeRange(startTime, startTime.plusMinutes(reservationLength))
-    val valid = workSlot.reservations.filter {
+    val valid = workSlot.reservations.none {
       it.timeRange!!.inConflict(candidateTimeRange)
-    }.isEmpty()
-    if(valid)
+    }
+    if (valid)
       recommendations.add(candidateTimeRange)
     startTime = startTime.plusMinutes(jumpTime)
   }
   return recommendations
+}
+
+fun getSortedReservations(workSlot: WorkSlot): List<Reservation> {
+  return workSlot.reservations.sorted()
+}
+
+// precondition: workSlot reservations are not empty
+fun getStartGap(workSlot: WorkSlot): Int {
+  Assert.assertTrue(workSlot.reservations.isNotEmpty())
+  val workSlotStartSeconds =
+    workSlot.timeRange!!.startTime!!.toSecondOfDay()
+  val reservationStartSeconds =
+    getSortedReservations(workSlot).first().timeRange!!.startTime!!.toSecondOfDay()
+  return (reservationStartSeconds - workSlotStartSeconds) / 60
+}
+
+// precondition: workSlot reservations are not empty
+fun getEndGap(workSlot: WorkSlot): Int {
+  Assert.assertTrue(workSlot.reservations.isNotEmpty())
+  val workSlotEndSeconds =
+    workSlot.timeRange!!.endTime!!.toSecondOfDay()
+  val reservationEndSeconds =
+    getSortedReservations(workSlot).last().timeRange!!.endTime!!.toSecondOfDay()
+  return (workSlotEndSeconds - reservationEndSeconds) / 60
+}
+
+// precondition: workSlot reservations are not empty
+fun calcLargestGap(workSlot: WorkSlot): Int {
+  val sortedReservations = getSortedReservations(workSlot)
+  var largestGap = 0
+  if (sortedReservations.isEmpty())
+    return largestGap
+
+  val startGap = getStartGap(workSlot)
+  val endGap = getEndGap(workSlot)
+
+  if(startGap > largestGap )
+    largestGap = startGap
+
+  if(endGap > largestGap)
+    largestGap = endGap
+
+  for (i in 1 until sortedReservations.size) {
+    val currentStartSeconds =
+      (sortedReservations[i].timeRange!!.startTime!!.toSecondOfDay())
+    val previousEndSeconds =
+      (sortedReservations[i - 1].timeRange!!.endTime!!.toSecondOfDay())
+    val tempSmallestGapMinutes: Int =
+      (currentStartSeconds - previousEndSeconds) / 60
+    if (largestGap < tempSmallestGapMinutes)
+      largestGap = tempSmallestGapMinutes
+  }
+  return largestGap
 }

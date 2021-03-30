@@ -1,6 +1,7 @@
 package de.freshspark.resify.controllers.api.public
 
 import de.freshspark.resify.logic.calRecommendedTimeRanges
+import de.freshspark.resify.logic.calcLargestGap
 import de.freshspark.resify.models.TimeRange
 import de.freshspark.resify.models.WorkSlot
 import de.freshspark.resify.repositories.CalendarRepository
@@ -37,13 +38,39 @@ class CalendarController(
     val workSlots = workSlotRepository.findByCalendarAndDay(calendar, date)
     val recommendedTimeRanges = mutableListOf<TimeRange>()
     workSlots.forEach { workSlot: WorkSlot ->
-      recommendedTimeRanges.addAll(calRecommendedTimeRanges(
-        workSlot,
-        length,
-        15
-      ))
+      recommendedTimeRanges.addAll(
+        calRecommendedTimeRanges(
+          workSlot,
+          length,
+          15
+        )
+      )
     }
     return recommendedTimeRanges
+  }
+
+  @GetMapping("/{route}/days")
+  fun getAvailableDays(
+    @PathVariable company: String,
+    @PathVariable route: String,
+    @RequestParam dateString: String,
+    @RequestParam length: Long
+  ) {
+    val calendar = calendarRepository.findByRouteAndCompanyName(route, company)
+      ?: throw NoSuchElementException("calendar not found")
+    val date = LocalDate.parse(dateString)
+    val daysInMonth = date.month.length(date.isLeapYear)
+    val availableDaySet = mutableSetOf<Int>()
+
+    for(i in 1..daysInMonth) {
+      val tempDate = LocalDate.of(date.year, date.monthValue, date.dayOfMonth)
+      val workSlots = workSlotRepository.findByCalendarAndDay(calendar, tempDate)
+      for(workSlot in workSlots) {
+        if(workSlot.largestGap >= length) {
+          availableDaySet.add(tempDate.dayOfMonth)
+        }
+      }
+    }
   }
 }
 

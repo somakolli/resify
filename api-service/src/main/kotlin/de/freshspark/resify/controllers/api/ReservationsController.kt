@@ -5,6 +5,7 @@ import de.freshspark.resify.DataIntegrityViolationException
 import de.freshspark.resify.AuthenticationInterceptor
 import de.freshspark.resify.CompanyRequired
 import de.freshspark.resify.NoAuthorizationException
+import de.freshspark.resify.logic.calcLargestGap
 import de.freshspark.resify.logic.checkIfTimeRangeInWorkSlot
 import de.freshspark.resify.repositories.CalendarRepository
 import de.freshspark.resify.repositories.ReservationRepository
@@ -78,11 +79,12 @@ class ReservationsController(
       calendarRepository.findByRouteAndCompany(calendarRoute, company)
         ?: throw NoSuchElementException("calendar");
 
+    val duration = reservation.services!!.fold(0)
+      { acc, service -> acc + service.duration!! }
     canCreateReservation(calendar)
     reservation.timeRange!!.endTime =
-      reservation.timeRange!!.startTime!!.plusMinutes(
-        reservation.services!!.fold(0)
-          { acc, service -> acc + service.duration!! })
+      reservation.timeRange!!.startTime!!.plusMinutes(duration.toLong())
+
     val workSlots =
       workSlotRepository.findByCalendarAndDay(calendar, reservation.day!!)
     val validWorkSlots =
@@ -96,9 +98,10 @@ class ReservationsController(
       throw DataIntegrityViolationException("no work slot for reservation")
     if (validWorkSlots.size > 1)
       throw DataIntegrityViolationException("multiple work slots for reservation")
-    val reservation = reservationsRepository.save(reservation)
-    validWorkSlots[0].reservations.add(reservation)
+    val savedReservation = reservationsRepository.save(reservation)
+    validWorkSlots[0].reservations.add(savedReservation)
+    validWorkSlots[0].largestGap = calcLargestGap(validWorkSlots[0])
     workSlotRepository.save(validWorkSlots[0])
-    return Response.status(201).entity(reservation).build()
+    return Response.status(201).entity(savedReservation).build()
   }
 }
