@@ -2,19 +2,19 @@
   <div class="w-full">
     <div class="font-bold text-xl w-full text-center underline">Summary</div>
     <div class="flex flex-col">
-      <div>
+      <div class="flex flex-col">
         <div class="flex flex-row justify-between mt-5">
           <span class="font-bold text-xl">Services</span>
           <Icon @click="reservationState = ReservationState.Service"
                 icon-name="pencil" class="w-6 h-6"></Icon>
         </div>
-        <div class="flex flex-col">
+        <div class="flex flex-col w-9/12 self-center">
           <ListItem class="mt-3" v-for="(service, index) in reservation.services" :duration="service.duration"
                     :main-content="service.name" :key="index"></ListItem>
         </div>
       </div>
       <div>
-        <div class="flex flex-row justify-between mt-5">
+        <div class="flex flex-row justify-between mt-10">
           <span class="font-bold text-xl">Date</span>
           <Icon @click="reservationState = ReservationState.Date" icon-name="pencil" class="w-6 h-6"></Icon>
         </div>
@@ -25,7 +25,7 @@
         </div>
       </div>
       <div>
-        <div class="flex flex-row justify-between mt-5">
+        <div class="flex flex-row justify-between mt-10">
           <span class="font-bold text-xl">Contact Information</span>
           <Icon @click="reservationState = ReservationState.PersonalInformation" icon-name="pencil" class="w-6 h-6"></Icon>
         </div>
@@ -44,7 +44,6 @@ import ListItem from "@/components/ListItem.vue";
 export default {
   components: {Icon, ListItem},
   setup() {
-    console.log(reservation.value);
     return {
       reservation,
       reservationState,

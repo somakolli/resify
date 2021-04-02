@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts">
-import {computed, ref, watchEffect} from "@vue/composition-api";
+import {computed, ref} from "@vue/composition-api";
 import ListItem from "@/components/ListItem.vue";
 import Button from "@/components/shared-components/Button.vue";
 import ReservationSelector from "@/components/ReservationSelector.vue";
