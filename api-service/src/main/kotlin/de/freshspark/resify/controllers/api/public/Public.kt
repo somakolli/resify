@@ -47,11 +47,11 @@ class CalendarController(
     return recommendedTimeRanges
   }
 
-  @PostMapping("/reservations")
+  @PostMapping("/{route}/reservations")
   fun postReservation(
     @RequestBody reservation: Reservation,
-    @PathVariable companyName: String,
-    @PathVariable calendarRoute: String,
+    @PathVariable("company") companyName: String,
+    @PathVariable("route") calendarRoute: String,
   ): Reservation? {
     val calendar = calendarRepository.findByRouteAndCompanyName(calendarRoute, companyName) ?:
     throw NoSuchElementException("calendar not found")

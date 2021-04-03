@@ -44,7 +44,7 @@ import {
   nextClick
 } from "@/pages/_company/_calendar/index.vue";
 import {ref, watchEffect} from "@vue/composition-api";
-import {setValidAnyMoveOn} from "~/pages/_company/_calendar/index.vue";
+import {setValidAndMoveOn} from "~/pages/_company/_calendar/index.vue";
 export default {
   props: {
     calendar: {
@@ -65,7 +65,7 @@ export default {
       return reservation.value.services.length > 0;
     }
 
-    setValidAnyMoveOn(props, emit, nextClick, validate);
+    setValidAndMoveOn(props, emit, nextClick, validate);
     return { removeService, totalDuration, selectedServices: reservation.value.services };
   },
 };

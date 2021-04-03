@@ -25,7 +25,7 @@ import {ref, watchEffect} from "@vue/composition-api";
 import {TimeRange} from "~/shared-modules/DateTime/TimeRange";
 import Icon from "@/components/shared-components/Icon.vue";
 import {reservation} from '@/pages/_company/_calendar/index.vue'
-import {nextClick, setValidAnyMoveOn} from "~/pages/_company/_calendar/index.vue";
+import {nextClick, setValidAndMoveOn} from "~/pages/_company/_calendar/index.vue";
 
 export default {
   components: {DaySelect, Icon},
@@ -83,7 +83,7 @@ export default {
       return selectedIndex.value > -1
     }
 
-    setValidAnyMoveOn(props, emit, nextClick, validate)
+    setValidAndMoveOn(props, emit, nextClick, validate)
     return {
       selectedDate,
       today: MyDate.fromString("2021-03-01"),

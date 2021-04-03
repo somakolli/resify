@@ -13,9 +13,8 @@
 import LabelInput from '@/components/shared-components/LabelInput.vue'
 import {reservation, nextClick} from '@/pages/_company/_calendar/index.vue'
 import {validate} from "jsonschema";
-import {setValidAnyMoveOn} from "~/pages/_company/_calendar/index.vue";
-import {ref, watchEffect} from "@vue/composition-api";
-import {watch} from "@nuxtjs/composition-api";
+import {setValidAndMoveOn} from "~/pages/_company/_calendar/index.vue";
+import {ref} from "@vue/composition-api";
 
 export const errorTexts = ref<any>({})
 export default {
@@ -62,7 +61,7 @@ export default {
     }
 
 
-    setValidAnyMoveOn(props, emit, nextClick, validatePersonalInformation)
+    setValidAndMoveOn(props, emit, nextClick, validatePersonalInformation)
     return {
       reservation,
       personalInformationSchema,

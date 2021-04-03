@@ -69,7 +69,7 @@ export const totalDuration = computed(() => {
   return returnDuration;
 });
 
-export function setValidAnyMoveOn(props: any, emit: any, nextClick: any, validate: any) {
+export function setValidAndMoveOn(props: any, emit: any, nextClick: any, validate: any) {
   let startClick = props.startClick;
   watch(() => nextClick.value, (count) => {
     if (count > startClick && validate())
@@ -117,13 +117,13 @@ export default {
   // this gets executed on the server
   async asyncData({params, $http}: any) {
     //TODO: get calendar from previous request
-    const calendar = await $http.$get(
-      `public/${params.company}/${params.calendar}`
-    );
+    const url = `public/${params.company}/${params.calendar}`
+    const calendar = await $http.$get(url);
+    console.log(calendar);
     return {
-      calendar,
-      companyName: params.company,
-    };
+        calendar,
+        companyName: params.company,
+      };
   },
 };
 </script>
