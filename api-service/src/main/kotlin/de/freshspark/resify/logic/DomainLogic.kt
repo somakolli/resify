@@ -3,6 +3,7 @@ package de.freshspark.resify.logic
 import de.freshspark.resify.models.*
 import org.wildfly.common.Assert
 import java.util.*
+import kotlin.NoSuchElementException
 
 fun checkIfReservationValid(
   reservations: List<Reservation>,
@@ -21,9 +22,12 @@ fun checkIfTimeRangeInWorkSlot(
   workSlot: WorkSlot,
   timeRange: TimeRange
 ): Boolean {
-  val workSlotTimeRange = workSlot.timeRange;
-  return workSlotTimeRange!!.startTime!!.isBefore(timeRange.startTime) &&
-      workSlotTimeRange.endTime!!.isAfter(timeRange.endTime)
+  val workSlotTimeRange = workSlot.timeRange ?:
+      throw NoSuchElementException("[checkIfTimeRangeInWorkSlot]timeRange not found")
+  return (workSlotTimeRange.startTime!!.isBefore(timeRange.startTime)
+              || workSlotTimeRange.startTime!! == timeRange.startTime)
+          && (workSlotTimeRange.endTime!!.isAfter(timeRange.endTime)
+              ||  workSlotTimeRange.endTime == timeRange.endTime)
 }
 
 fun checkIfTimeRangeInWorkSlot(workSlots: List<WorkSlot>, timeRange: TimeRange)

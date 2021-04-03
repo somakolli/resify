@@ -71,7 +71,7 @@ class DomainLogicTest {
   @Test
   fun timeRangeInWorkSlot() {
     var timeRange = TimeRange()
-    timeRange.startTime = (LocalTime.of(14, 30))
+    timeRange.startTime = (LocalTime.of(13, 0))
     timeRange.endTime = (LocalTime.of(14, 45))
     var workSlot = WorkSlot()
     var workSlotTimeRange = TimeRange()
