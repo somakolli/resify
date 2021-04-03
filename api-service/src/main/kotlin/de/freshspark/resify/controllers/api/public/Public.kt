@@ -1,13 +1,10 @@
 package de.freshspark.resify.controllers.api.public
 
 import de.freshspark.resify.logic.calRecommendedTimeRanges
-import de.freshspark.resify.logic.calcLargestGap
+import de.freshspark.resify.models.Reservation
 import de.freshspark.resify.models.TimeRange
 import de.freshspark.resify.models.WorkSlot
-import de.freshspark.resify.repositories.CalendarRepository
-import de.freshspark.resify.repositories.CompanyRepository
-import de.freshspark.resify.repositories.UserRepository
-import de.freshspark.resify.repositories.WorkSlotRepository
+import de.freshspark.resify.repositories.*
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 
@@ -76,8 +73,27 @@ class CalendarController(
 
 @RestController
 @RequestMapping("/public")
-class PublicController(val companyRepository: CompanyRepository) {
+class CompanyController(val companyRepository: CompanyRepository) {
   @GetMapping("/companies")
   fun searchCompanies(@RequestParam("q") searchString: String) =
     companyRepository.findAllByNameContains(searchString)
+}
+
+
+@RestController
+@RequestMapping("/public/{companyName}/{calendarRoute}")
+class ReservationController(
+  val calendarRepository: CalendarRepository,
+  val reservationPersistence: ReservationRepository) {
+  @PostMapping("/reservations")
+  fun postReservation(
+    @RequestBody reservation: Reservation,
+    @PathVariable companyName: String,
+    @PathVariable calendarRoute: String,
+    ): Reservation? {
+    val calendar = calendarRepository.findByRouteAndCompanyName(calendarRoute, companyName) ?:
+          throw NoSuchElementException("calendar not found")
+
+    return reservationPersistence.saveAndValidate(reservation, calendar)
+  }
 }

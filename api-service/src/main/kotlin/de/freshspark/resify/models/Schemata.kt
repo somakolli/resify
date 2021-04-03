@@ -1,22 +1,30 @@
 package de.freshspark.resify.models
+fun String.minimizeJson(): String {
+  return trimIndent().trimMargin().replace("\n", "").replace(" ", "")
+}
 
 val defaultPersonalInformation = """
-  {
-    "type": "object",
-    "properties": {
-      "first-name": {
-        "type": "string"
-      },
-      "last-name": {
-        "type": "string"
-      },
-      "email": {
-        "type": "string"
-      },
-      "phone-number": {
-        "type": "string"
-      }
+{
+  "type": "object",
+  "properties": {
+    "first-name": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 20,
     },
-    "required": ["first-name", "last-name", "email", "phone-number"]
-  }
-""".trimIndent().trimMargin().replace("\n", "").replace(" ", "")
+    "last-name": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 20,
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "phone-number": {
+      "type": "string",
+    }
+  },
+  "required": ["first-name", "last-name", "email", "phone-number"]
+}
+""".minimizeJson()

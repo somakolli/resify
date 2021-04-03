@@ -27,6 +27,7 @@ dependencies {
     implementation("io.quarkus:quarkus-resteasy")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("io.quarkus:quarkus-arc")
+    implementation(group = "org.everit.json", name = "org.everit.json.schema", version = "1.5.1")
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.rest-assured:rest-assured")
 }
