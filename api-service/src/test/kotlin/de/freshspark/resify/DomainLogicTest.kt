@@ -15,7 +15,7 @@ class DomainLogicTest {
     timeRange1.startTime = LocalTime.of(13, 30)
     timeRange1.endTime = LocalTime.of(14, 0)
     var timeRange2 = TimeRange()
-    timeRange2.startTime = (LocalTime.of(14, 15))
+    timeRange2.startTime = (LocalTime.of(14, 0))
     timeRange2.endTime = (LocalTime.of(15, 30))
     var conflict = timeRange1.inConflict(timeRange2)
     Assert.assertFalse(conflict)
