@@ -10,19 +10,19 @@ val defaultPersonalInformation = """
     "first-name": {
       "type": "string",
       "minLength": 2,
-      "maxLength": 20,
+      "maxLength": 20
     },
     "last-name": {
       "type": "string",
       "minLength": 2,
-      "maxLength": 20,
+      "maxLength": 20
     },
     "email": {
       "type": "string",
       "format": "email"
     },
     "phone-number": {
-      "type": "string",
+      "type": "string"
     }
   },
   "required": ["first-name", "last-name", "email", "phone-number"]
