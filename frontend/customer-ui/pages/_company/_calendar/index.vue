@@ -27,22 +27,25 @@
         @valid="reservationState++"
       ></PersonalInformationEntry>
       <Summary
-        v-else-if="reservationState === ReservationState.Summary"
-        class="w-full mt-5"
-      ></Summary>
+        v-else-if="reservationState === ReservationState.Summary || ReservationState.Confirmed"
+        class="w-full mt-5">
+      </Summary>
+      <div v-else>Error! State not found!</div>
     </div>
     <div class="w-full flex flex-col items-center mb-5">
       <Button
         v-if="reservationState === ReservationState.Summary"
         primary
         class="w-32 h-10"
-      >Confirm
-      </Button
-      >
-      <Button v-else @click="nextClick++" primary class="w-32 h-10 my-5"
-      >Next
-      </Button
-      >
+        @click="sendReservation()">
+        Confirm
+      </Button>
+      <div v-else-if="reservationState === ReservationState.Confirmed">
+        <Button class="w-32 h-10">Add To Calendar</Button>
+      </div>
+      <Button v-else @click="nextClick++" primary class="w-32 h-10 my-5">
+        Next
+      </Button>
     </div>
   </div>
 </template>
@@ -58,6 +61,7 @@ import ServiceSelector from "@/components/ServiceSelector.vue";
 import {TimeRange} from "~/shared-modules/DateTime/TimeRange";
 import {Reservation} from "~/shared-modules/models/Reservation";
 import {watch} from "@nuxtjs/composition-api";
+import {HttpHelper} from "~/shared-modules/helpers/HttpHelper";
 
 export const reservation = ref<Reservation>(new Reservation("", new TimeRange(), {}));
 export const url = "http://localhost:8080/";
@@ -87,9 +91,12 @@ export enum ReservationState {
   Date = 1,
   PersonalInformation = 2,
   Summary = 3,
+  Confirmed = 4
 }
 
 export const reservationState = ref(ReservationState.Service);
+let companyName = ''
+let calendar: any = null
 const validState = new Array<boolean>(4).fill(false)
 export default {
   components: {
@@ -98,10 +105,17 @@ export default {
     Button,
     ReservationSelector,
     PersonalInformationEntry,
-    Summary
+    Summary,
   },
 
-  setup() {
+  setup(props: any, test: any) {
+    console.log('root', test)
+
+    async function sendReservation() {
+      console.log(calendar);
+
+    }
+
     const numberOfSteps = 4;
     return {
       reservation,
@@ -114,16 +128,32 @@ export default {
       nextClick
     };
   },
+  methods: {
+    sendReservation: async function () {
+      let httpHelper = new HttpHelper();
+      // clone object
+      const requestReservation = JSON.parse(JSON.stringify(reservation.value))
+      requestReservation.personalInformation = JSON.stringify(requestReservation.personalInformation)
+      requestReservation.id = null
+      try {
+        const returnReservation = await httpHelper.postData(`${url}public/${(this as any).companyName}/${(this as any).calendar.route}/reservations`, requestReservation)
+        reservationState.value++
+      } catch (e) {
+
+      }
+    }
+  },
   // this gets executed on the server
   async asyncData({params, $http}: any) {
     //TODO: get calendar from previous request
     const url = `public/${params.company}/${params.calendar}`
-    const calendar = await $http.$get(url);
-    console.log(calendar);
+    calendar = await $http.$get(url);
+    companyName = params.company
+
     return {
-        calendar,
-        companyName: params.company,
-      };
+      calendar,
+      companyName: params.company,
+    };
   },
 };
 </script>

@@ -2,7 +2,7 @@ import { AuthProvider } from "./auth/AuthProvider";
 
 export class HttpHelper {
   authProvider: AuthProvider | null;
-  constructor(authProvider: AuthProvider | null) {
+  constructor(authProvider: AuthProvider | null = null) {
     this.authProvider = authProvider;
   }
 
