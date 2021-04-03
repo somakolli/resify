@@ -12,7 +12,8 @@ import java.time.LocalDate
 @RequestMapping("/public/{company}")
 class CalendarController(
   val calendarRepository: CalendarRepository,
-  val workSlotRepository: WorkSlotRepository
+  val workSlotRepository: WorkSlotRepository,
+  val reservationRepository: ReservationRepository
 ) {
   @GetMapping("")
   fun getCalendars(@PathVariable company: String) =
@@ -46,6 +47,17 @@ class CalendarController(
     return recommendedTimeRanges
   }
 
+  @PostMapping("/reservations")
+  fun postReservation(
+    @RequestBody reservation: Reservation,
+    @PathVariable companyName: String,
+    @PathVariable calendarRoute: String,
+  ): Reservation? {
+    val calendar = calendarRepository.findByRouteAndCompanyName(calendarRoute, companyName) ?:
+    throw NoSuchElementException("calendar not found")
+
+    return reservationRepository.saveAndValidate(reservation, calendar)
+  }
   @GetMapping("/{route}/days")
   fun getAvailableDays(
     @PathVariable company: String,
@@ -77,23 +89,4 @@ class CompanyController(val companyRepository: CompanyRepository) {
   @GetMapping("/companies")
   fun searchCompanies(@RequestParam("q") searchString: String) =
     companyRepository.findAllByNameContains(searchString)
-}
-
-
-@RestController
-@RequestMapping("/public/{companyName}/{calendarRoute}")
-class ReservationController(
-  val calendarRepository: CalendarRepository,
-  val reservationPersistence: ReservationRepository) {
-  @PostMapping("/reservations")
-  fun postReservation(
-    @RequestBody reservation: Reservation,
-    @PathVariable companyName: String,
-    @PathVariable calendarRoute: String,
-    ): Reservation? {
-    val calendar = calendarRepository.findByRouteAndCompanyName(calendarRoute, companyName) ?:
-          throw NoSuchElementException("calendar not found")
-
-    return reservationPersistence.saveAndValidate(reservation, calendar)
-  }
 }
