@@ -9,6 +9,8 @@ import org.wildfly.common.Assert
 import java.time.LocalTime
 
 class DomainLogicTest {
+  // TODO: use createTimeRange(hour, minutes) to make this code more
+  //       readable/maintainable
   @Test
   fun timeRangeInConflict() {
     var timeRange1 = TimeRange()
