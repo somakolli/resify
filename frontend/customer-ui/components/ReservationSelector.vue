@@ -25,7 +25,7 @@ import {ref, watchEffect} from "@vue/composition-api";
 import {TimeRange} from "~/shared-modules/DateTime/TimeRange";
 import Icon from "@/components/shared-components/Icon.vue";
 import {reservation} from '@/pages/_company/_calendar/index.vue'
-import {nextClick, setValidAndMoveOn} from "~/pages/_company/_calendar/index.vue";
+import {nextClick, setValidAndMoveOn, totalDuration} from "~/pages/_company/_calendar/index.vue";
 
 export default {
   components: {DaySelect, Icon},
@@ -67,7 +67,8 @@ export default {
 
     async function updateRecommendations() {
       const recommendationsRequest =
-        await fetch(`${props.url}public/${props.companyName}/${props.calendar.route}/reservations?dateString=${selectedDate.value.toISOString()}&length=15`)
+        await fetch(`${props.url}public/${props.companyName}/${props.calendar.route}`+
+          `/reservations?dateString=${selectedDate.value.toISOString()}&length=${totalDuration.value}`)
       const recommendationsResponse = await recommendationsRequest.json()
       for (const recommendation of recommendationsResponse)
         recommendations.value.push(TimeRange.fromServerResponse(recommendation))

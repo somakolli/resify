@@ -5,7 +5,8 @@
       <div class="flex flex-col">
         <div class="flex flex-row justify-between mt-5">
           <span class="font-bold text-xl">Services</span>
-          <Icon @click="reservationState = ReservationState.Service"
+          <Icon v-if="reservationState!==ReservationState.Confirmed"
+                @click="reservationState = ReservationState.Service"
                 icon-name="pencil" class="w-6 h-6"></Icon>
         </div>
         <div class="flex flex-col w-9/12 self-center">
@@ -16,7 +17,8 @@
       <div>
         <div class="flex flex-row justify-between mt-10">
           <span class="font-bold text-xl">Date</span>
-          <Icon @click="reservationState = ReservationState.Date" icon-name="pencil" class="w-6 h-6"></Icon>
+          <Icon v-if="reservationState!==ReservationState.Confirmed"
+                @click="reservationState = ReservationState.Date" icon-name="pencil" class="w-6 h-6"></Icon>
         </div>
         <div class="mt-5 text-center font-bold text-xl">
           {{ reservation.day.dayNameLong() }}<br>
@@ -27,7 +29,8 @@
       <div>
         <div class="flex flex-row justify-between mt-10">
           <span class="font-bold text-xl">Contact Information</span>
-          <Icon @click="reservationState = ReservationState.PersonalInformation" icon-name="pencil" class="w-6 h-6"></Icon>
+          <Icon v-if="reservationState!==ReservationState.Confirmed"
+            @click="reservationState = ReservationState.PersonalInformation" icon-name="pencil" class="w-6 h-6"></Icon>
         </div>
         <div class="flex font-bold flex-col text-center text-xl mt-5">
           <span v-for="information in reservation.personalInformation">{{information}}</span>
