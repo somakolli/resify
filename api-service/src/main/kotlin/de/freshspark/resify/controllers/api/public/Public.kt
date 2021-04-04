@@ -1,5 +1,8 @@
 package de.freshspark.resify.controllers.api.public
 
+import de.freshspark.resify.DataIntegrityViolationException
+import de.freshspark.resify.helper.ICalCalendar
+import de.freshspark.resify.helper.toICal
 import de.freshspark.resify.logic.calRecommendedTimeRanges
 import de.freshspark.resify.models.Reservation
 import de.freshspark.resify.models.TimeRange
@@ -52,11 +55,14 @@ class CalendarController(
     @RequestBody reservation: Reservation,
     @PathVariable("company") companyName: String,
     @PathVariable("route") calendarRoute: String,
-  ): Reservation? {
+  ): ICalCalendar {
     val calendar = calendarRepository.findByRouteAndCompanyName(calendarRoute, companyName) ?:
     throw NoSuchElementException("calendar not found")
 
-    return reservationRepository.saveAndValidate(reservation, calendar)
+    val createdReservation = reservationRepository.saveAndValidate(reservation, calendar)?:
+        throw DataIntegrityViolationException("[postReservation(public)]could not store reservation")
+
+    return reservation.toICal(calendar);
   }
   @GetMapping("/{route}/days")
   fun getAvailableDays(

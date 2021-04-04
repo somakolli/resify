@@ -23,10 +23,10 @@ class ServiceController(
     company.admins.contains(currentUser) || company.owner == currentUser
 
   fun hasResourceReadPermission(calendar: ReservationsCalendar) =
-    currentUser.permissions.contains(ReadPermission(calendar.id))
+    currentUser.permissions.contains(readPermission(calendar.id))
 
   fun hasResourceWritePermission(calendar: ReservationsCalendar) =
-    currentUser.permissions.contains(WritePermission(calendar.id))
+    currentUser.permissions.contains(writePermission(calendar.id))
 
   fun canCreateService(calendar: ReservationsCalendar) {
     if(!isAdminOrOwner && !hasResourceWritePermission(calendar))
@@ -44,9 +44,9 @@ class ServiceController(
       calendarRepository.findByRouteAndCompany(calendarRoute, company)
         ?: throw NoSuchElementException("calendar not found");
     canCreateService(calendar)
-    val service = serviceRepository.save(service)
-    calendar.services?.add(service)
+    val createdService = serviceRepository.save(service)
+    calendar.services?.add(createdService)
     calendarRepository.save(calendar)
-    return Response.status(201).entity(service).build()
+    return Response.status(201).entity(createdService).build()
   }
 }

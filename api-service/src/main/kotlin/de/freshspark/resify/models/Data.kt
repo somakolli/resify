@@ -7,6 +7,8 @@ import org.hibernate.annotations.Cascade
 import org.hibernate.annotations.CascadeType
 import org.hibernate.annotations.CreationTimestamp
 import java.time.*
+import java.time.temporal.ChronoUnit
+import java.time.temporal.TemporalUnit
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 import javax.json.bind.annotation.JsonbTransient
@@ -31,12 +33,13 @@ enum class PermissionType(val binNum: Int) {
   Write(0b10)
 }
 
-fun ReadPermission(resource: UUID?) = Permission(
+fun readPermission(resource: UUID?) = Permission(
   resource
 )
-fun WritePermission(resource: UUID?) = Permission(
+fun writePermission(resource: UUID?) = Permission(
   resource, PermissionScope.All, PermissionType.Write
 )
+
 
 @Entity
 open class Permission (
@@ -69,6 +72,7 @@ class TimeRange(
     return endTime!!.isAfter(other.startTime) &&
         startTime!!.isBefore(other.endTime)
   }
+  fun duration(): Int = startTime!!.until(endTime, ChronoUnit.MINUTES).toInt()
 }
 
 @MappedSuperclass
