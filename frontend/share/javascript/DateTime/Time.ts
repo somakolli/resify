@@ -1,3 +1,5 @@
+import {addLeadingZero} from "./MyDate";
+
 export class Time {
   date: Date;
 
@@ -41,5 +43,8 @@ export class Time {
   }
   set minutes(minutes) {
     this.date = new Date(0, 0, 0, this.hours, minutes, 0, 0);
+  }
+  toJSON() {
+    return addLeadingZero(this.hours) + ':' + addLeadingZero(this.minutes)
   }
 }

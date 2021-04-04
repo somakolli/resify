@@ -41,7 +41,9 @@
         Confirm
       </Button>
       <div v-else-if="reservationState === ReservationState.Confirmed">
-        <Button class="w-32 h-10">Add To Calendar</Button>
+        <a :href="'data:text/calendar;charset=utf8,' + icalReservation.value" class="w-32 h-10">
+          <Button @click="addToCalendar" class="w-32 h-10">Add To Calendar</Button>
+        </a>
       </div>
       <Button v-else @click="nextClick++" primary class="w-32 h-10 my-5">
         Next
@@ -113,10 +115,13 @@ export default {
 
     async function sendReservation() {
       console.log(calendar);
+    }
+    const icalReservation = ref("");
+    const numberOfSteps = 4;
+    function addToCalendar() {
+
 
     }
-
-    const numberOfSteps = 4;
     return {
       reservation,
       totalDuration,
@@ -125,7 +130,9 @@ export default {
       numberOfSteps,
       url,
       selectedTimeRange,
-      nextClick
+      nextClick,
+      icalReservation,
+      addToCalendar
     };
   },
   methods: {
@@ -136,11 +143,12 @@ export default {
       requestReservation.personalInformation = JSON.stringify(requestReservation.personalInformation)
       requestReservation.id = null
       try {
-        const returnReservation = await httpHelper.postData(`${url}public/${(this as any).companyName}/${(this as any).calendar.route}/reservations`, requestReservation)
+        const iCalReservation = await httpHelper.postData(`${url}public/${(this as any).companyName}/${(this as any).calendar.route}/reservations`, requestReservation)
         reservationState.value++
+        (this as any).icalReservation = iCalReservation;
       } catch (e) {
 
-      }
+     }
     }
   },
   // this gets executed on the server

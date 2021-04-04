@@ -1,5 +1,8 @@
 import CalendarHelper from "../helpers/CalendarHelper";
 
+export function addLeadingZero(a: number) {
+  return (a < 10) ? '0' + a : a;
+}
 export class MyDate {
   year: number;
   month: number;
@@ -9,9 +12,6 @@ export class MyDate {
     this.year = year;
     this.month = month;
     this.day = day;
-  }
-  private static pad(a: number, b: number) {
-    return (1e15 + a + "").slice(-b);
   }
   toDate() {
     return new Date(this.year, this.month, this.day);
@@ -43,7 +43,7 @@ export class MyDate {
   toISOString() {
     return [this.year, this.month + 1, this.day]
       .map((value) => {
-        return value < 1000 ? MyDate.pad(value, 2) : value;
+        return value < 1000 ? addLeadingZero(value) : value;
       })
       .join("-");
   }
@@ -55,5 +55,8 @@ export class MyDate {
   }
   monthNameLong() {
     return CalendarHelper.getMonthName(this.toDate(), 'en', 'long');
+  }
+  toJSON() {
+    return this.toISOString()
   }
 }
