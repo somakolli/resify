@@ -78,9 +78,7 @@ class TimeRange(
 
 @MappedSuperclass
 open class ResifyObject (
-  @Id @GeneratedValue(generator = "uuid2")
-  @GenericGenerator(name= "uuid", strategy = "uuid2")
-  @Column(columnDefinition = "BINARY(16)")
+  @Id @GeneratedValue
   open var id: UUID? = null
 )
 
