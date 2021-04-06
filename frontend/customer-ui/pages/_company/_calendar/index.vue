@@ -40,7 +40,8 @@
         @click="sendReservation()">
         Confirm
       </Button>
-      <div v-else-if="reservationState === ReservationState.Confirmed">
+      <div class="flex flex-col justify-center" v-else-if="reservationState === ReservationState.Confirmed">
+        <Icon icon-name="check" class="w-28 h-28 text-green-700 self-center"></Icon>
         <a :href="'data:text/calendar;charset=utf8,' + icalReservation.value" class="w-32 h-10">
           <Button @click="addToCalendar" class="w-32 h-10">Add To Calendar</Button>
         </a>
@@ -60,6 +61,7 @@ import ReservationSelector from "@/components/ReservationSelector.vue";
 import PersonalInformationEntry from "@/components/PersonalInformationEntry.vue";
 import Summary from "@/components/Summary.vue";
 import ServiceSelector from "@/components/ServiceSelector.vue";
+import Icon from "@/components/shared-components/Icon.vue"
 import {TimeRange} from "~/shared-modules/DateTime/TimeRange";
 import {Reservation} from "~/shared-modules/models/Reservation";
 import {watch} from "@nuxtjs/composition-api";
@@ -108,6 +110,7 @@ export default {
     ReservationSelector,
     PersonalInformationEntry,
     Summary,
+    Icon
   },
 
   setup(props: any, test: any) {

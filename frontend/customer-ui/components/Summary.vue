@@ -9,7 +9,7 @@
                 @click="reservationState = ReservationState.Service"
                 icon-name="pencil" class="w-6 h-6"></Icon>
         </div>
-        <div class="flex flex-col w-9/12 self-center">
+        <div class="flex flex-col w-full self-center">
           <ListItem class="mt-3" v-for="(service, index) in reservation.services" :duration="service.duration"
                     :main-content="service.name" :key="index"></ListItem>
         </div>
