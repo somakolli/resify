@@ -1,0 +1,23 @@
+FROM node:lts-alpine
+
+WORKDIR /frontend/customer-ui
+
+COPY customer-ui/package.json .
+
+COPY customer-ui/yarn.lock .
+
+RUN yarn install
+
+COPY ./customer-ui .
+
+COPY ./share ../share
+
+RUN ls
+
+RUN yarn build
+
+EXPOSE 8080
+
+ENV HOST=0 
+ENV PORT=8080 
+CMD [ "yarn", "start" ]

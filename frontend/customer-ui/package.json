@@ -7,7 +7,7 @@
     "build": "yarn installdep && nuxt-ts build",
     "start": "nuxt-ts start",
     "generate": "nuxt-ts generate",
-    "installdep": "cd ../share/javascript && yarn install && cd ../../customer-ui && ./generateSharedComponents.sh"
+    "installdep": "./generateSharedComponents.sh"
   },
   "dependencies": {
     "@nuxt/http": "^0.6.4",

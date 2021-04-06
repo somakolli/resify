@@ -1,0 +1,48 @@
+version: "3.1"
+services:
+  api-service:
+    build: 
+      context: ./api-service/.
+      dockerfile: ./src/main/docker/Dockerfile.multistage
+      args:
+        db_kind: mysql
+        db_username: root
+        db_password: example
+        db_url: jdbc:mysql://db:8080/resify
+        auth_url: http://auth:4321
+    ports: 
+      - "8080:8080"
+    depends_on:
+      - db
+      - auth
+    environment:
+      db_kind: postgresql
+      db_username: postgres
+      db_password: postgres
+      db_url: jdbc:postgresql://db:5431/resify
+      auth_url: http://auth:4321
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: resify
+    ports:
+      - "3306:3306"
+  auth:
+    build: ./mock-oauth-server
+    ports:
+      - "4321:4321"
+  customer-ui:
+    build: 
+      context: ./frontend
+      dockerfile: ./Dockerfile_customer-ui
+    ports:
+      - "5000:5000"
+  admin-ui:
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile_admin-ui
+    ports:
+      - "4200:8080"

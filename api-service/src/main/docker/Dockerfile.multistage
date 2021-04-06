@@ -1,0 +1,39 @@
+## Stage 1 : build with maven builder image with native capabilities
+FROM quay.io/quarkus/centos-quarkus-maven:21.0.0-java11 AS build
+COPY src /usr/src/app/src
+COPY gradle.properties /usr/src/app
+COPY ./settings.gradle.kts /usr/src/app
+COPY ./build.gradle.kts /usr/src/app
+USER root
+RUN chown -R quarkus /usr/src/app
+USER quarkus
+ARG db_kind
+ARG db_username
+ARG db_password
+ARG db_url
+ARG auth_url
+
+RUN echo "test $db_url"
+RUN echo "test $auth_url"
+RUN echo "RUN gradle -b /usr/src/app/build.gradle.kts clean build -Dquarkus.package.type=native \
+-Dquarkus.datasource.db-kind=$db_kind \
+-Dquarkus.datasource.username=$db_username \
+-Dquarkus.datasource.password=$db_password \
+-Dquarkus.datasource.jdbc.url=$db_url \
+-Dquarkus.oidc.auth-server-url=$auth_url"
+
+RUN gradle -b /usr/src/app/build.gradle.kts clean build -Dquarkus.package.type=native \
+-Dquarkus.datasource.db-kind=$db_kind \
+-Dquarkus.datasource.username=$db_username \
+-Dquarkus.datasource.password=$db_password \
+-Dquarkus.datasource.jdbc.url=$db_url \
+-Dquarkus.oidc.auth-server-url=$auth_url
+
+## Stage 2 : create the docker final image
+FROM registry.access.redhat.com/ubi8/ubi-minimal
+WORKDIR /work/
+COPY --from=build /usr/src/app/build/*-runner /work/application
+RUN chmod 775 /work
+EXPOSE 8080
+ENV auth_url $auth_url
+CMD ["./application", "-Dquarkus.http.host=0.0.0.0", "-Dquarkus.oidc.auth-server-url=${auth_url}"]

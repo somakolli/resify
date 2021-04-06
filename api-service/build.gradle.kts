@@ -13,6 +13,14 @@ val quarkusPlatformGroupId: String by project
 val quarkusPlatformArtifactId: String by project
 val quarkusPlatformVersion: String by project
 
+tasks.quarkusBuild {
+    nativeArgs {
+        "container-build" to true
+        "buildImage" to "quay.io/quarkus/ubi-quarkus-native-image:21.0.0-java11"
+        "quarkus.native.java-home" to "/opt/java-11/"
+    }
+}
+
 dependencies {
     implementation("io.quarkus:quarkus-resteasy-jsonb")
     implementation("io.quarkus:quarkus-spring-data-jpa")
@@ -21,6 +29,7 @@ dependencies {
     implementation("io.quarkus:quarkus-container-image-jib")
     implementation("io.quarkus:quarkus-oidc")
     implementation("io.quarkus:quarkus-jdbc-postgresql")
+    implementation("io.quarkus:quarkus-jdbc-mysql")
     implementation(enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
     implementation("io.quarkus:quarkus-jdbc-h2")
     implementation("io.quarkus:quarkus-kotlin")

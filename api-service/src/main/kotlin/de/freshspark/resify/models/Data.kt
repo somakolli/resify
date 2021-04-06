@@ -6,6 +6,7 @@ import io.quarkus.runtime.annotations.RegisterForReflection
 import org.hibernate.annotations.Cascade
 import org.hibernate.annotations.CascadeType
 import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.GenericGenerator
 import java.time.*
 import java.time.temporal.ChronoUnit
 import java.time.temporal.TemporalUnit
@@ -77,9 +78,11 @@ class TimeRange(
 
 @MappedSuperclass
 open class ResifyObject (
-  @Id @GeneratedValue
+  @Id @GeneratedValue(generator = "uuid2")
+  @GenericGenerator(name= "uuid", strategy = "uuid2")
+  @Column(columnDefinition = "BINARY(16)")
   open var id: UUID? = null
-    )
+)
 
 @Entity
 open class Reservation
