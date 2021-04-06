@@ -69,7 +69,7 @@ export default {
 
     async function updateRecommendations() {
       const recommendationsRequest =
-        await fetch(`${props.url}public/${props.companyName}/${props.calendar.route}`+
+        await fetch(`${props.url}public/${props.companyName}/${props.calendar.route}` +
           `/reservations?dateString=${selectedDate.value.toISOString()}&length=${totalDuration.value}`)
       const recommendationsResponse = await recommendationsRequest.json()
       for (const recommendation of recommendationsResponse)
