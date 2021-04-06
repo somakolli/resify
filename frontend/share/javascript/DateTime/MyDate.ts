@@ -32,6 +32,12 @@ export class MyDate {
   static today() {
     return this.fromDate(new Date(Date.now()));
   }
+  firstDateOfMonth() {
+    return new MyDate(this.year, this.month, 1);
+  }
+  lastDateOfMonth() {
+    return new MyDate(this.year, this.month, this.numberOfDays())
+  }
   addDay(value: number) {
     const tempDate = this.toDate();
     tempDate.setDate(tempDate.getDate() + value);
@@ -39,6 +45,14 @@ export class MyDate {
     this.month = tempDate.getMonth();
     this.day = tempDate.getDate();
     return this;
+  }
+  addMonth(value: number) {
+    const tempDate = this.toDate();
+    tempDate.setMonth(this.month + value)
+    this.year = tempDate.getFullYear()
+    this.month = tempDate.getMonth()
+    this.day = tempDate.getDate()
+    return this
   }
   toISOString() {
     return [this.year, this.month + 1, this.day]
@@ -50,11 +64,23 @@ export class MyDate {
   formatLong() {
     return this.day + ' ' + this.monthNameLong() + ' ' +  this.year;
   }
+  dayNameShort(): string {
+    return CalendarHelper.getDayName(this.toDate(), 'en', 'short')
+  }
   dayNameLong(): string{
     return CalendarHelper.getDayName(this.toDate(), 'en', 'long')
   }
   monthNameLong() {
     return CalendarHelper.getMonthName(this.toDate(), 'en', 'long');
+  }
+  firstDay(): number {
+    return CalendarHelper.getFirstDay(this.toDate())
+  }
+  lastDay(): number {
+    return CalendarHelper.getLastDay(this.toDate())
+  }
+  numberOfDays(): number {
+    return CalendarHelper.getNumberOfDays(this.toDate())
   }
   toJSON() {
     return this.toISOString()

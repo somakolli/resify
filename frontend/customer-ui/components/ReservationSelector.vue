@@ -2,8 +2,10 @@
   <div class="flex flex-col">
     <span class="font-bold self-center text-xl">Select Date and Time</span>
     <DaySelect
-      :selectedDate="selectedDate"
+      :inputSelectedDate="selectedDate"
       @update:selectedDate="logSelectedDate($event)"
+      :show-selection="true"
+      :show-selected-date="false"
     ></DaySelect>
     <div class="flex flex-col mt-5">
       <div @click="selectedIndex = index"
