@@ -5,11 +5,7 @@ services:
       context: ./api-service/.
       dockerfile: ./src/main/docker/Dockerfile.multistage
       args:
-        db_kind: mysql
-        db_username: root
-        db_password: example
-        db_url: jdbc:mysql://db:8080/resify
-        auth_url: http://auth:4321
+        db_kind: postgresql
     ports: 
       - "8080:8080"
     depends_on:
@@ -17,23 +13,27 @@ services:
       - auth
     environment:
       db_kind: postgresql
-      db_username: postgres
-      db_password: postgres
-      db_url: jdbc:postgresql://db:5431/resify
+      db.USERNAME: ${DB_USER}
+      db.PASSWORD: ${DB_PASSWORD}
+      db.HOSTNAME: db
+      db.PORT: 5432
+      db.DATABASE: resify
       auth_url: http://auth:4321
   db:
-    image: mysql
-    command: --default-authentication-plugin=mysql_native_password
+    image: postgres
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: example
-      MYSQL_DATABASE: resify
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: resify
     ports:
-      - "3306:3306"
+      - "5432:5432"
   auth:
     build: ./mock-oauth-server
     ports:
       - "4321:4321"
+    environment: 
+      host: localhost
   customer-ui:
     build: 
       context: ./frontend

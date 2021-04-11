@@ -4,4 +4,7 @@ RUN npm install -g oauth2-mock-server
 
 EXPOSE 8080
 
-CMD [ "oauth2-mock-server",  "-p",  "4321" ]
+ENV AUTH_HOST="localhost"
+
+
+CMD [ "oauth2-mock-server",  "-p",  "4321", "-a" ,"localhost"]

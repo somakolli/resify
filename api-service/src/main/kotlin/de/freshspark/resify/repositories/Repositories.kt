@@ -10,12 +10,34 @@ import org.springframework.data.jpa.repository.JpaRepository
 import java.time.LocalDate
 import java.util.*
 import javax.enterprise.context.ApplicationScoped
+import javax.enterprise.inject.Default
+import javax.inject.Inject
 import javax.ws.rs.ext.Provider
 
-interface UserRepository : JpaRepository<ResifyUser, UUID> {
+private interface UserJPARepository : JpaRepository<ResifyUser, UUID> {
   fun findByEmailAndCompany(email: String, company: Company): ResifyUser?
   fun findAllByCompany(company: Company): List<ResifyUser>?
   fun findByEmail(email: String): ResifyUser?
+}
+
+
+@Provider
+class UserRepository {
+
+  @Inject
+  @field: Default
+  private lateinit var userRepository: UserJPARepository
+
+  fun findByEmailAndCompany(email: String, company: Company): ResifyUser? =
+    userRepository.findByEmailAndCompany(email, company)
+  fun findAllByCompany(company: Company): List<ResifyUser>? =
+    userRepository.findAllByCompany(company)
+  fun findByEmail(email: String): ResifyUser? =
+    userRepository.findByEmail(email)
+  fun save(user: ResifyUser): ResifyUser =
+    userRepository.save(user)
+  fun findAll(): MutableList<ResifyUser> =
+    userRepository.findAll()
 }
 
 interface CalendarRepository : JpaRepository<ReservationsCalendar, UUID> {
@@ -48,29 +70,27 @@ interface ConfigurationWorkSlotsRepository :
   JpaRepository<ConfigurationWorkSlot, UUID> {
 }
 
-interface ReservationRepository : JpaRepository<Reservation, UUID>,
-  ReservationPersistenceInterface {
-    // dont use the JpaRepository save function outside of this class
-}
 
 interface CompanyRepository : JpaRepository<Company, UUID> {
   fun findAllByNameContains(searchString: String): List<Company>?
 }
 
-interface ReservationPersistenceInterface {
-  // use this save function for creating reservations
-  fun saveAndValidate(
-    reservation: Reservation,
-    calendar: ReservationsCalendar
-  ): Reservation?
+private interface ReservationJPARepository : JpaRepository<Reservation, UUID> {
 }
 
+@Provider
+class ReservationRepository(
+) {
 
-private class ReservationPersistence(
-  val reservationRepository: ReservationRepository,
-  val workSlotRepository: WorkSlotRepository
-) : ReservationPersistenceInterface {
-  override fun saveAndValidate(
+  @Inject
+  @field: Default
+  private lateinit var reservationRepository: ReservationJPARepository
+
+  @Inject
+  @field: Default
+  lateinit var workSlotRepository: WorkSlotRepository
+
+  fun saveAndValidate(
     reservation: Reservation,
     calendar: ReservationsCalendar
   ): Reservation {

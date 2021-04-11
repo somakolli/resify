@@ -1,0 +1,12 @@
+name: resify
+
+services:
+- name: customer-ui
+  gitlab: 
+    repo: freshspark/resify
+    branch: master
+    deploy_on_push: true
+  source_dir: frontend/customer-ui
+  routes:
+  - path: /
+
