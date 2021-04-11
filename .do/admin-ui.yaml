@@ -6,7 +6,8 @@ services:
     repo: freshspark/resify
     branch: master
     deploy_on_push: true
-  source_dir: frontend/customer-ui
+  source_dir: frontend
   routes:
   - path: /
+  dockerfile_path: Dockerfile_customer-ui
 
