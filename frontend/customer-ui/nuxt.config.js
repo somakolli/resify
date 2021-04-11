@@ -43,7 +43,7 @@ export default {
     '@nuxt/http',
   ],
   http: {
-    'baseURL': 'http://localhost:8080'
+    'baseURL': process.env.BASE_URL || 'http://localhost:8080'
   },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {

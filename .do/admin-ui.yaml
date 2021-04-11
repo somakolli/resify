@@ -9,5 +9,5 @@ services:
   source_dir: frontend
   routes:
   - path: /
-  dockerfile_path: Dockerfile_customer-ui
+  dockerfile_path: frontend/Dockerfile_customer-ui
 
