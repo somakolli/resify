@@ -7,6 +7,9 @@ import de.freshspark.resify.models.*
 import org.everit.json.schema.loader.SchemaLoader
 import org.json.JSONObject
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Modifying
+import org.springframework.data.jpa.repository.Query
+import org.springframework.data.repository.query.Param
 import java.time.LocalDate
 import java.util.*
 import javax.enterprise.context.ApplicationScoped
@@ -30,12 +33,16 @@ class UserRepository {
 
   fun findByEmailAndCompany(email: String, company: Company): ResifyUser? =
     userRepository.findByEmailAndCompany(email, company)
+
   fun findAllByCompany(company: Company): List<ResifyUser>? =
     userRepository.findAllByCompany(company)
+
   fun findByEmail(email: String): ResifyUser? =
     userRepository.findByEmail(email)
+
   fun save(user: ResifyUser): ResifyUser =
     userRepository.save(user)
+
   fun findAll(): MutableList<ResifyUser> =
     userRepository.findAll()
 }
@@ -59,11 +66,41 @@ interface ServiceRepository : JpaRepository<Service, UUID> {
 
 }
 
-interface WorkSlotRepository : JpaRepository<WorkSlot, UUID> {
+interface WorkSlotRepositoryInternal : JpaRepository<WorkSlot, UUID> {
   fun findByCalendarAndDay(
     calendar: ReservationsCalendar,
     day: LocalDate
   ): List<WorkSlot>
+}
+
+@ApplicationScoped
+class WorkSlotRepository {
+  @Inject
+  @field: Default
+  lateinit var workSlotRepositoryInternal: WorkSlotRepositoryInternal
+
+  fun save(workSlot: WorkSlot): WorkSlot? {
+    val otherWorkSlots = workSlotRepositoryInternal.findByCalendarAndDay(
+      workSlot.calendar!!,
+      workSlot.day!!
+    )
+    if (workSlot.id == null) {
+      for (otherWorkSlot in otherWorkSlots) {
+        if (otherWorkSlot.timeRange!!.inConflict(workSlot.timeRange!!)) {
+          throw DataIntegrityViolationException("[WorkSlotRepository] workslot conflict")
+        }
+      }
+    }
+    return workSlotRepositoryInternal.save(workSlot)
+  }
+
+  fun findByCalendarAndDay(
+    calendar: ReservationsCalendar,
+    day: LocalDate
+  ): List<WorkSlot> {
+    return workSlotRepositoryInternal.findByCalendarAndDay(calendar, day)
+  }
+
 }
 
 interface ConfigurationWorkSlotsRepository :
@@ -72,7 +109,12 @@ interface ConfigurationWorkSlotsRepository :
 
 
 interface CompanyRepository : JpaRepository<Company, UUID> {
+  fun findAllByName(searchString: String): List<Company>?
   fun findAllByNameContains(searchString: String): List<Company>?
+
+  @Modifying
+  @Query("UPDATE Company c set c.calendarCount = c.calendarCount + 1 WHERE c.id = :companyId")
+  fun incrementCalendarCount(@Param("companyId") companyId: UUID)
 }
 
 private interface ReservationJPARepository : JpaRepository<Reservation, UUID> {
@@ -127,8 +169,8 @@ class ReservationRepository(
       throw DataIntegrityViolationException("no work slot for reservation")
     if (validWorkSlots.size > 1)
       throw DataIntegrityViolationException("multiple work slots for reservation")
-    val savedReservation = reservationRepository.save(reservation) ?:
-        throw DataIntegrityViolationException("could not save reservation")
+    val savedReservation = reservationRepository.save(reservation)
+      ?: throw DataIntegrityViolationException("could not save reservation")
     validWorkSlots[0].reservations.add(savedReservation)
     validWorkSlots[0].largestGap = calcLargestGap(validWorkSlots[0])
     workSlotRepository.save(validWorkSlots[0])

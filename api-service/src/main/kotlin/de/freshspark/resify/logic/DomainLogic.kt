@@ -83,19 +83,22 @@ fun calRecommendedTimeRanges(
   reservationLength: Long,
   jumpTime: Long
 ): MutableList<TimeRange> {
-  var startTime = workSlot.timeRange!!.startTime!!
+  val startTime = workSlot.timeRange!!.startTime!!
   val endTime = workSlot.timeRange!!.endTime!!
   val recommendations = mutableListOf<TimeRange>()
 
-  while (startTime.isBefore(endTime)) {
+  var reservationStartTime = startTime
+  var reservationEndTime = startTime.plusMinutes(reservationLength)
+  while (reservationEndTime.isBefore(endTime)) {
     val candidateTimeRange =
-      TimeRange(startTime, startTime.plusMinutes(reservationLength))
+      TimeRange(reservationStartTime, reservationEndTime)
     val valid = workSlot.reservations.none {
       it.timeRange!!.inConflict(candidateTimeRange)
     }
     if (valid)
       recommendations.add(candidateTimeRange)
-    startTime = startTime.plusMinutes(jumpTime)
+    reservationStartTime = reservationStartTime.plusMinutes(jumpTime)
+    reservationEndTime = reservationStartTime.plusMinutes(jumpTime)
   }
   return recommendations
 }

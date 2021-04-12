@@ -113,7 +113,8 @@ open class Company(
   @OneToMany
   @JsonbTransient
   open var users: MutableCollection<ResifyUser> = mutableListOf(),
-  open var visibility: Visibility = Visibility.Private
+  open var visibility: Visibility = Visibility.Private,
+  open var calendarCount: Int = 0
 ): ResifyObject()
 
 @Entity

@@ -5,6 +5,7 @@ import de.freshspark.resify.logic.generateWorkSlots
 import de.freshspark.resify.logic.hasPermission
 import de.freshspark.resify.models.*
 import de.freshspark.resify.repositories.CalendarRepository
+import de.freshspark.resify.repositories.CompanyRepository
 import de.freshspark.resify.repositories.WorkSlotRepository
 import org.springframework.web.bind.annotation.*
 import java.util.*
@@ -16,7 +17,8 @@ import javax.ws.rs.core.Response
 class CalendarController(
   private val calendarRepository: CalendarRepository,
   private val authenticationInterceptor: AuthenticationInterceptor,
-  private val workSlotRepository: WorkSlotRepository
+  private val workSlotRepository: WorkSlotRepository,
+  private val companyRepository: CompanyRepository
 ) {
   val company = authenticationInterceptor.currentUser.company
   val currentUser = authenticationInterceptor.currentUser
@@ -60,8 +62,10 @@ class CalendarController(
     calendar.company = company
     canCreateCalendar()
     try {
-      return Response.status(201)
+      val responseCalendar = Response.status(201)
         .entity(calendarRepository.saveAndFlush(calendar)).build()
+      companyRepository.incrementCalendarCount(company!!.id!!)
+      return responseCalendar
     } catch (e: Exception) {
       throw CalendarRouteDuplicate(calendar.route)
     }

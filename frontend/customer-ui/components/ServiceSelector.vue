@@ -1,7 +1,7 @@
 <template>
-  <span>
+  <span class="overflow-auto">
     <span class="font-bold text-lg mt-5 self-start">Choose a Service</span>
-    <div class="flex flex-col mt-5 space-y-6 w-full">
+    <div class="flex flex-col mt-5 space-y-6 px-1">
       <ListItem
         v-for="service in calendar.services"
         :key="service.serviceId"
@@ -13,8 +13,8 @@
       </ListItem>
     </div>
     <div class="font-bold mt-6 text-lg self-start">Selected Services</div>
-    <div class="flex flex-col mt-3 space-y-6 w-full">
-      <div class="flex flex-col space-y-6" v-if="selectedServices.length > 0">
+    <div class="flex flex-col mt-3 space-y-6 overflow-auto">
+      <div class="flex flex-col space-y-6 overflow-auto px-1 pb-1" v-if="selectedServices.length > 0">
         <ListItem
           v-for="(service, index) in selectedServices"
           :key="index"

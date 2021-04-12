@@ -23,7 +23,7 @@ class WorkSlotController(
   fun createWorkSlot(
     @RequestBody workSlot: WorkSlot,
     @PathVariable calendarRoute: String
-  ): WorkSlot {
+  ): WorkSlot? {
     val company = authenticationInterceptor.currentUser.company!!
     val calendar =
       calendarRepository.findByRouteAndCompany(calendarRoute, company)

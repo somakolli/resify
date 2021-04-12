@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-col w-full h-screen justify-between items-center">
-    <div class="w-10/12 mt-5 flex flex-col items-center">
+  <div class="flex flex-col w-full h-screen justify-between items-center max-w-lg mx-auto">
+    <div class="w-10/12 mt-5 flex flex-col items-center h-5/6">
       <div class="font-bold text-xl">{{ calendar.calendarName }}</div>
       <ServiceSelector
         v-if="reservationState === ReservationState.Service"
@@ -68,7 +68,7 @@ import {watch} from "@nuxtjs/composition-api";
 import {HttpHelper} from "~/shared-modules/helpers/HttpHelper";
 
 export const reservation = ref<Reservation>(new Reservation("", new TimeRange(), {}));
-export const url = "http://localhost:8080/";
+export const url = process.env.baseUrl;
 export const totalDuration = computed(() => {
   let returnDuration = 0;
   for (const service of reservation.value.services) {
@@ -146,7 +146,7 @@ export default {
       requestReservation.personalInformation = JSON.stringify(requestReservation.personalInformation)
       requestReservation.id = null
       try {
-        const iCalReservation = await httpHelper.postData(`${url}public/${(this as any).companyName}/${(this as any).calendar.route}/reservations`, requestReservation)
+        const iCalReservation = await httpHelper.postData(`${url}/public/companies/${(this as any).companyName}/${(this as any).calendar.route}/reservations`, requestReservation)
         reservationState.value++
         (this as any).icalReservation = iCalReservation;
       } catch (e) {
@@ -157,7 +157,7 @@ export default {
   // this gets executed on the server
   async asyncData({params, $http}: any) {
     //TODO: get calendar from previous request
-    const url = `public/${params.company}/${params.calendar}`
+    const url = `public/companies/${params.company}/${params.calendar}`
     calendar = await $http.$get(url);
     companyName = params.company
 

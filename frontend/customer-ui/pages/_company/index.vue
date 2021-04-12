@@ -6,14 +6,14 @@
     <div class="w-full flex flex-col items-center mt-5">
       <NuxtLink
         no-prefetch
-        class="w-10/12 shadow rounded-md flex flex-row justify-between px-3 py-3 font-bold"
+        class="w-10/12 shadow rounded-md flex flex-row justify-between px-3 py-3 font-bold max-w-lg"
         v-for="calendar in calendars"
         :key="calendar.calendarName"
         :to="`${companyName}/${calendar.route}`"
+
       >
         <Icon iconName="calendar" class="w-6 h-6"></Icon>
         <span>{{ calendar.calendarName }}</span>
-        {{ calendar.route }}
         <Icon iconName="arrow-right" class="w-6 h-6"></Icon>
       </NuxtLink>
     </div>
@@ -25,8 +25,9 @@ import Icon from "../../components/shared-components/Icon.vue";
 export default {
   components: { Icon },
   async asyncData({ params, $http }: any) {
-    const calendars = await $http.$get(`public/${params.company}`);
-    console.log(calendars);
+    console.log(`/public/companies/${params.company}`);
+    console.log($http)
+    const calendars = await $http.$get(`/public/companies/${params.company}`);
     const companyName = params.company;
     return {
       calendars,

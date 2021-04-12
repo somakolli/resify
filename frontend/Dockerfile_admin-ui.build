@@ -1,0 +1,17 @@
+FROM node:lts-alpine
+
+RUN npm install -g http-server
+
+WORKDIR /frontend/admin-ui
+
+COPY admin-ui/package.json ./
+
+COPY admin-ui/yarn.lock ./
+
+RUN yarn install
+
+COPY ./admin-ui ./
+
+COPY ./share ../share
+
+RUN yarn build

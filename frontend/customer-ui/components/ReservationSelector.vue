@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col">
+  <div class="flex flex-col overflow-auto">
     <span class="font-bold self-center text-xl">Select Date and Time</span>
     <DaySelect
       :inputSelectedDate="selectedDate"
@@ -7,9 +7,9 @@
       :show-selection="true"
       :show-selected-date="false"
     ></DaySelect>
-    <div class="flex flex-col mt-5">
+    <div class="flex flex-col mt-5 overflow-auto h-full items-center">
       <div @click="selectedIndex = index"
-           class="w-full h-14 shadow flex justify-between items-center rounded-full pl-5 mt-5 cursor-pointer"
+           class="w-11/12 h-14 shadow flex justify-between items-center rounded-full pl-5 mb-3 cursor-pointer flex-shrink-0"
            v-for="(recommendation, index) in recommendations" :key="index">
         <span :class="{'text-green-700': selectedIndex === index}">{{ toISOString(recommendation) }}</span>
         <div v-if="index === selectedIndex" class="h-full w-16 rounded-full shadow flex">
@@ -69,9 +69,11 @@ export default {
 
     async function updateRecommendations() {
       const recommendationsRequest =
-        await fetch(`${props.url}public/${props.companyName}/${props.calendar.route}` +
+        await fetch(`${props.url}/public/companies/${props.companyName}/${props.calendar.route}` +
           `/reservations?dateString=${selectedDate.value.toISOString()}&length=${totalDuration.value}`)
       const recommendationsResponse = await recommendationsRequest.json()
+      recommendations.value = []
+      selectedIndex.value = -1;
       for (const recommendation of recommendationsResponse)
         recommendations.value.push(TimeRange.fromServerResponse(recommendation))
     }

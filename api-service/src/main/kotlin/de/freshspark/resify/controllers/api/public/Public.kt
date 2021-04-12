@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 
 @RestController
-@RequestMapping("/public/{company}")
+@RequestMapping("/public/companies/{company}")
 class CalendarController(
   val calendarRepository: CalendarRepository,
   val workSlotRepository: WorkSlotRepository,
@@ -62,7 +62,7 @@ class CalendarController(
     val createdReservation = reservationRepository.saveAndValidate(reservation, calendar)?:
         throw DataIntegrityViolationException("[postReservation(public)]could not store reservation")
 
-    return reservation.toICal(calendar);
+    return createdReservation.toICal(calendar);
   }
   @GetMapping("/{route}/days")
   fun getAvailableDays(
@@ -92,7 +92,7 @@ class CalendarController(
 @RestController
 @RequestMapping("/public")
 class CompanyController(val companyRepository: CompanyRepository) {
-  @GetMapping("/companies")
+  @GetMapping("/search-company")
   fun searchCompanies(@RequestParam("q") searchString: String) =
     companyRepository.findAllByNameContains(searchString)
 }

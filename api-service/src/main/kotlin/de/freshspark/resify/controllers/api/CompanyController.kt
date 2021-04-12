@@ -10,6 +10,7 @@ import de.freshspark.resify.repositories.CompanyRepository
 import de.freshspark.resify.repositories.UserRepository
 import org.springframework.web.bind.annotation.*
 import javax.validation.constraints.Email
+import javax.ws.rs.GET
 import javax.ws.rs.POST
 import javax.ws.rs.PUT
 import javax.ws.rs.Path

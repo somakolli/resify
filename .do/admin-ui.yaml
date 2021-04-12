@@ -8,6 +8,25 @@ services:
     deploy_on_push: true
   source_dir: frontend
   routes:
-  - path: /
+  - path: /customer
   dockerfile_path: frontend/Dockerfile_customer-ui
+  envs:
+    - key: BASE_URL
+      value: api-service-o24s2.ondigitalocean.app
 
+static_sites:
+- name: admin-ui
+  gitlab:
+    repo: freshspark/resify
+    branch: master
+    deploy_on_push: true
+  source_dir: frontend
+  routes:
+  - path: /admin
+  dockerfile_path: frontend/Dockerfile_admin-ui.build
+  output_dir: /dist
+  envs:
+    - key: BASE_URL
+      value: api-service-o24s2.ondigitalocean.app
+    - key: AUTH_METHOD
+      value: amazon
