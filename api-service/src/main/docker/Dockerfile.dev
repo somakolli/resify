@@ -1,0 +1,15 @@
+FROM quay.io/quarkus/centos-quarkus-maven:21.0.0-java11 AS build
+COPY src /usr/src/app/src
+COPY gradle.properties /usr/src/app
+COPY ./settings.gradle.kts /usr/src/app
+COPY ./build.gradle.kts /usr/src/app
+USER root
+RUN chown -R quarkus /usr/src/app
+USER quarkus
+
+EXPOSE 8080
+CMD ["gradle", "quarkusDev",  "-Dquarkus.http.host=0.0.0.0", \
+"-Dquarkus.oidc.auth-server-url=${auth_url}", \
+"-Dquarkus.datasource.username=${DB_USERNAME}", \
+"-Dquarkus.datasource.password=${DB_PASSWORD}", \
+"-Dquarkus.datasource.jdbc.url=jdbc:postgresql://${DB_HOSTNAME}:${DB_PORT}/${DB_DATABASE}"]

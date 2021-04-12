@@ -1,0 +1,45 @@
+databases:
+- engine: PG
+  name: resify
+  num_nodes: 1
+  size: db-s-dev-database
+  version: "12"
+domains:
+- domain: api.resify.de
+  type: PRIMARY
+  zone: resify.de
+name: api-service
+region: fra
+services:
+- envs:
+  - key: auth_url
+    scope: RUN_TIME
+    value: https://cognito-idp.eu-central-1.amazonaws.com/eu-central-1_AXmKyWWqL
+  - key: DB_HOSTNAME
+    scope: RUN_AND_BUILD_TIME
+    value: app-33907703-94b4-466f-a54b-32c7e6925d81-do-user-8730114-0.b.db.ondigitalocean.com
+  - key: DB_PORT
+    scope: RUN_AND_BUILD_TIME
+    value: "25060"
+  - key: DB_USERNAME
+    scope: RUN_AND_BUILD_TIME
+    value: resify
+  - key: DB_PASSWORD
+    scope: RUN_AND_BUILD_TIME
+    type: SECRET
+    value: EV[1:GyIU1LY642H41GLYt/Ksbd25jI9UxfWY:/MgBwhwIhac9r+JS4X60UMv5Sw6fPmdPls89etWRyLw=]
+  - key: DB_DATABASE
+    scope: RUN_AND_BUILD_TIME
+    value: resify
+  http_port: 8080
+  gitlab:
+    repo: freshspark/resify
+    branch: master
+    deploy_on_push: true
+  source_dir: api-service
+  dockerfile_path: api-service/src/main/docker/Dockerfile.jvm
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  name: api-service
+  routes:
+  - path: /
