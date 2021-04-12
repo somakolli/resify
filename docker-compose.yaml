@@ -6,6 +6,12 @@ services:
       dockerfile: ./src/main/docker/Dockerfile.jvm
       args:
         db_kind: postgresql
+        DB_USERNAME: ${DB_USER}
+        DB_PASSWORD: ${DB_PASSWORD}
+        DB_HOSTNAME: db
+        DB_PORT: 5432
+        DB_DATABASE: resify
+        auth_url: http://auth:4321
     ports: 
       - "8081:8080"
     depends_on:
@@ -13,11 +19,11 @@ services:
       - auth
     environment:
       db_kind: postgresql
-      db.USERNAME: ${DB_USER}
-      db.PASSWORD: ${DB_PASSWORD}
-      db.HOSTNAME: db
-      db.PORT: 5432
-      db.DATABASE: resify
+      DB_USERNAME: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOSTNAME: db
+      DB_PORT: 5432
+      DB_DATABASE: resify
       auth_url: http://auth:4321
   db:
     image: postgres

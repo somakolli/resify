@@ -40,7 +40,6 @@ ARG RUN_JAVA_VERSION=1.3.8
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en'
 # Install java and the run-java script
 # Also set up permissions for user `1001`
-RUN rm /var/lib/dnf/history.sqlite
 RUN microdnf install curl ca-certificates java-11-openjdk-headless \
     && microdnf update \
     && microdnf clean all \
@@ -52,6 +51,22 @@ RUN microdnf install curl ca-certificates java-11-openjdk-headless \
     && chown 1001 /deployments/run-java.sh \
     && chmod 540 /deployments/run-java.sh \
     && echo "securerandom.source=file:/dev/urandom" >> /etc/alternatives/jre/lib/security/java.security
+
+
+ARG DB_USERNAME
+ARG DB_PASSWORD
+ARG auth_url
+ARG DB_PORT
+ARG DB_DATABASE
+ARG DB_HOSTNAME
+
+ENV DB_USERNAME=${DB_USERNAME}
+ENV DB_PASSWORD=${DB_PASSWORD}
+ENV auth_url=${auth_url}
+ENV DB_PORT=${DB_PORT}
+ENV DB_DATABASE=${DB_DATABASE}
+ENV DB_HOSTNAME=${DB_HOSTNAME}
+
 
 # Configure the JAVA_OPTIONS, you can add -XshowSettings:vm to also display the heap size.
 ENV JAVA_OPTIONS="-Dquarkus.http.host=0.0.0.0 \
