@@ -21,6 +21,18 @@
 # docker run -i --rm -p 8080:8080 -p 5005:5005 -e JAVA_ENABLE_DEBUG="true" quarkus/api-service-jvm
 #
 ###
+FROM quay.io/quarkus/centos-quarkus-maven:21.0.0-java11 AS build
+COPY src /usr/src/app/src
+COPY gradle.properties /usr/src/app
+COPY ./settings.gradle.kts /usr/src/app
+COPY ./build.gradle.kts /usr/src/app
+USER root
+RUN chown -R quarkus /usr/src/app
+USER quarkus
+
+RUN gradle -b /usr/src/app/build.gradle.kts clean build
+
+
 FROM registry.access.redhat.com/ubi8/ubi-minimal:8.3 
 
 ARG JAVA_PACKAGE=java-11-openjdk-headless
@@ -49,10 +61,10 @@ ENV JAVA_OPTIONS="-Dquarkus.http.host=0.0.0.0 \
 -Dquarkus.datasource.jdbc.url=jdbc:postgresql://${DB_HOSTNAME}:${DB_PORT}/${DB_DATABASE}"
 
 # We make four distinct layers so if there are application changes the library layers can be re-used
-COPY --chown=1001 build/quarkus-app/lib/ /deployments/lib/
-COPY --chown=1001 build/quarkus-app/*.jar /deployments/
-COPY --chown=1001 build/quarkus-app/app/ /deployments/app/
-COPY --chown=1001 build/quarkus-app/quarkus/ /deployments/quarkus/
+COPY --from=build /usr/src/app/build/quarkus-app/lib/ /deployments/lib/
+COPY --from=build /usr/src/app/build/quarkus-app/*.jar /deployments/
+COPY --from=build /usr/src/app/build/quarkus-app/app/ /deployments/app/
+COPY --from=build /usr/src/app/build/quarkus-app/quarkus/ /deployments/quarkus/
 
 EXPOSE 8080
 USER 1001
