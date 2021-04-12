@@ -6,7 +6,6 @@ services:
     repo: freshspark/resify
     branch: master
     deploy_on_push: true
-  catchall_document: index.html
   source_dir: frontend
   routes:
   - path: /

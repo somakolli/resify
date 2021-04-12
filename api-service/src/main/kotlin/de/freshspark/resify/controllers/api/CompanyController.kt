@@ -37,9 +37,9 @@ class CompanyController(
     canCreateCompany()
     company.owner = currentUser
     currentUser.company = company
-    val company = companyRepository.save(company)
+    val returnCompany = companyRepository.save(company)
     userRepository.save(currentUser)
-    return company
+    return returnCompany
   }
   @PUT
   @Path("/addUser")
