@@ -18,6 +18,8 @@ RUN yarn build
 
 EXPOSE 8080
 
+ARG BASE_URL
 ENV HOST=0 
 ENV PORT=8080 
+ENV BASE_URL=${BASE_URL}
 CMD [ "yarn", "start" ]

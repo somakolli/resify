@@ -1,18 +1,4 @@
-name: resify
-
-services:
-- name: customer-ui
-  gitlab: 
-    repo: freshspark/resify
-    branch: master
-    deploy_on_push: true
-  source_dir: frontend
-  routes:
-  - path: /customer
-  dockerfile_path: frontend/Dockerfile_customer-ui
-  envs:
-    - key: BASE_URL
-      value: api-service-o24s2.ondigitalocean.app
+name: admin-ui
 
 static_sites:
 - name: admin-ui
@@ -21,10 +7,11 @@ static_sites:
     branch: master
     deploy_on_push: true
   source_dir: frontend
+  catchall_document: index.html
   routes:
-  - path: /admin
+  - path: /
   dockerfile_path: frontend/Dockerfile_admin-ui.build
-  output_dir: /dist
+  output_dir: /frontend/admin-ui/dist
   envs:
     - key: BASE_URL
       value: api-service-o24s2.ondigitalocean.app
